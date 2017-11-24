@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import edu.sc.csce740.model.Permission;
 import edu.sc.csce740.model.Bill;
+import edu.sc.csce740.model.ROLE;
 import edu.sc.csce740.model.StudentRecord;
 
 
@@ -19,7 +20,6 @@ import edu.sc.csce740.model.Student;
 
 
 public class BILL implements BILLIntf {
-
     /**
      *
      */
@@ -114,9 +114,9 @@ public class BILL implements BILLIntf {
      * @throws Exception is the current user is not an admin.
      */
     public List<String> getStudentIDs() throws Exception {
-        if (activeUserId == null) {
+        if (activeUserId == null || !permissions.containsKey(activeUserId)) {
             throw new Exception("Current user is null, please log in to view student IDs");
-        } else if (permissions.get(activeUserId).getRole() == "student") {
+        } else if (permissions.get(activeUserId).getRole() == "STUDENT") {
             throw new Exception("You don't have permission to view student IDs.");
         } else {
             List<String> studentIdList = new ArrayList<String>();
@@ -140,7 +140,27 @@ public class BILL implements BILLIntf {
      *      CLASS HEADER.
      */
     public StudentRecord getRecord(String userId) throws Exception {
-        return new StudentRecord();
+        if (activeUserId == null
+                || !permissions.containsKey(activeUserId)
+                || !studentRecords.containsKey(userId)) {
+            throw new Exception("Current user is null or no record matching given user ID.");
+        } else {
+            String role = permissions.get(activeUserId).getRole();
+            if (role == ROLE.STUDENT.name()) {
+                if (activeUserId != userId) {
+                    throw new Exception("You don't have permission to view other student's record.");
+                } else {
+                    return studentRecords.get(userId);
+                }
+            } else {
+                // Check if this admin has the permission to view studentRecords of given userId
+                if (permissions.get(activeUserId).getRole() != permissions.get(userId).getRole()) {
+                    throw new Exception("You don't have permission to view other student's record.");
+                } else {
+                    return studentRecords.get(userId);
+                }
+            }
+        }
     }
 
     /**
