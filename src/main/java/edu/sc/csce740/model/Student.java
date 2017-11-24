@@ -13,8 +13,4 @@ public class Student {
     private String addressCity;
     private String addressState;
     private String addressPostalCode;
-
-    public String getId() {
-        return this.id;
-    }
 }
