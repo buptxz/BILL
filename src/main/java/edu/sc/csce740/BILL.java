@@ -104,7 +104,7 @@ public class BILL implements BILLIntf {
      * @return  the user id of the user currently using the system.
      */
     public String getUser() {
-        return "";
+        return this.activeUserId;
     }
 
     /**
@@ -114,7 +114,22 @@ public class BILL implements BILLIntf {
      * @throws Exception is the current user is not an admin.
      */
     public List<String> getStudentIDs() throws Exception {
-        return new ArrayList<String>();
+        if (activeUserId == null) {
+            throw new Exception("Current user is null, please log in to view student IDs");
+        } else if (permissions.get(activeUserId).getRole() == "student") {
+            throw new Exception("You don't have permission to view student IDs.");
+        } else {
+            List<String> studentIdList = new ArrayList<String>();
+            String currentUserCollege = permissions.get(activeUserId).getCollege();
+
+            for (String userId : permissions.keySet()) {
+                Permission userPermission = permissions.get(userId);
+                if (userId != activeUserId && userPermission.getCollege() == currentUserCollege) {
+                    studentIdList.add(userId);
+                }
+            }
+            return studentIdList;
+        }
     }
 
     /**
