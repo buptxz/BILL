@@ -3,22 +3,44 @@ package edu.sc.csce740;
 import java.math.BigDecimal;
 import java.io.FileReader;
 import java.io.File;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.Gson;
-import edu.sc.csce740.model.Permission;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.Gson;
+import edu.sc.csce740.model.Permission;
 import edu.sc.csce740.model.Bill;
 import edu.sc.csce740.model.StudentRecord;
 
 
+import edu.sc.csce740.model.Student;
+
+
 public class BILL implements BILLIntf {
+
+    /**
+     *
+     */
     private String activeUserId;
+
+    /**
+     *
+     */
     private Map<String, Permission> permissions;
+
+    /**
+     *
+     */
     private Map<String, StudentRecord> studentRecords;
+
+    /**
+     *
+     */
     private Map<String, Bill> bills;
+
+    ClassLoader classLoader = getClass().getClassLoader();
 
     public BILL() {
         activeUserId = null;
@@ -34,8 +56,8 @@ public class BILL implements BILLIntf {
      */
     public void loadUsers(String usersFile) throws Exception {
         List<Permission> permissionsList =
-                new Gson().fromJson( new FileReader( new File("users.txt")),
-                        new TypeToken<List<StudentRecord>>(){}.getType());
+                new Gson().fromJson( new FileReader(new File(classLoader.getResource(usersFile).getFile())),
+                        new TypeToken<List<Permission>>(){}.getType());
         for (Permission permission : permissionsList) {
             permissions.put(permission.getId(), permission);
         }
@@ -48,13 +70,12 @@ public class BILL implements BILLIntf {
      */
     public void loadRecords(String recordsFile) throws Exception {
         List<StudentRecord> studentRecordsList =
-                new Gson().fromJson( new FileReader( new File("students.txt")),
+                new Gson().fromJson( new FileReader(new File(classLoader.getResource(recordsFile).getFile())),
                         new TypeToken<List<StudentRecord>>(){}.getType());
 
         for (StudentRecord studentRecord : studentRecordsList) {
             studentRecords.put(studentRecord.getStudent().getId(), studentRecord);
         }
-
     }
 
     /**
@@ -63,7 +84,11 @@ public class BILL implements BILLIntf {
      * @throws Exception  if the user id is invalid.  SEE NOTE IN CLASS HEADER.
      */
     public void logIn(String userId) throws Exception {
-
+        if (!permissions.containsKey(userId)) {
+            throw new Exception("Not a valid user.");
+        } else {
+            this.activeUserId = userId;
+        }
     }
 
     /**
@@ -71,7 +96,7 @@ public class BILL implements BILLIntf {
      * @throws Exception  if the user id is invalid.  SEE NOTE IN CLASS HEADER.
      */
     public void logOut() throws Exception {
-
+        this.activeUserId = null;
     }
 
     /**
@@ -79,7 +104,7 @@ public class BILL implements BILLIntf {
      * @return  the user id of the user currently using the system.
      */
     public String getUser() {
-
+        return "";
     }
 
     /**
@@ -89,7 +114,7 @@ public class BILL implements BILLIntf {
      * @throws Exception is the current user is not an admin.
      */
     public List<String> getStudentIDs() throws Exception {
-
+        return new ArrayList<String>();
     }
 
     /**
@@ -100,7 +125,7 @@ public class BILL implements BILLIntf {
      *      CLASS HEADER.
      */
     public StudentRecord getRecord(String userId) throws Exception {
-
+        return new StudentRecord();
     }
 
     /**
@@ -125,7 +150,7 @@ public class BILL implements BILLIntf {
      * SEE NOTE IN CLASS HEADER.
      */
     public Bill generateBill(String userId) throws Exception {
-
+        return new Bill(new Student(), "1", "2");
     }
 
     /**
@@ -144,7 +169,7 @@ public class BILL implements BILLIntf {
     public Bill viewCharges(String userId, int startMonth, int startDay, int startYear,
                             int endMonth, int endDay, int endYear)
             throws Exception {
-
+        return new Bill(new Student(), "1", "2");
     }
 
     /**
