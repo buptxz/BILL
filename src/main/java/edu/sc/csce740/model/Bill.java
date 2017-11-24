@@ -1,7 +1,10 @@
 package edu.sc.csce740.model;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class Bill {
     private Student student;
     private String college;

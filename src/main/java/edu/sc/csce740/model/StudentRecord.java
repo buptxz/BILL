@@ -1,7 +1,12 @@
 package edu.sc.csce740.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.List;
 
+@AllArgsConstructor
+@Getter
 public class StudentRecord {
     private Student student;
     private String college;
@@ -20,8 +25,4 @@ public class StudentRecord {
     private boolean nationalStudentExchange;
     private List<Course> courses;
     private List<Transaction> transactions;
-
-    public Student getStudent() {
-        return this.student;
-    }
 }
