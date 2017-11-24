@@ -21,22 +21,25 @@ import edu.sc.csce740.model.Student;
 
 public class BILL implements BILLIntf {
     /**
-     *
+     * Currently active user id.
      */
     private String activeUserId;
 
     /**
-     *
+     * A hash map used to store {@link Permission}
+     * Key: String of user id
      */
     private Map<String, Permission> permissions;
 
     /**
-     *
+     * A hash map used to store {@link StudentRecord}
+     * Key: String of user id
      */
     private Map<String, StudentRecord> studentRecords;
 
     /**
-     *
+     *  A hash map used to store {@link Bill}
+     *  Key: String of user id
      */
     private Map<String, Bill> bills;
 
@@ -114,7 +117,7 @@ public class BILL implements BILLIntf {
      * @throws Exception is the current user is not an admin.
      */
     public List<String> getStudentIDs() throws Exception {
-        if (activeUserId == null || !permissions.containsKey(activeUserId)) {
+        if (activeUserId == null) {
             throw new Exception("Current user is null, please log in to view student IDs");
         } else if (permissions.get(activeUserId).getRole() == "STUDENT") {
             throw new Exception("You don't have permission to view student IDs.");
@@ -140,9 +143,7 @@ public class BILL implements BILLIntf {
      *      CLASS HEADER.
      */
     public StudentRecord getRecord(String userId) throws Exception {
-        if (activeUserId == null
-                || !permissions.containsKey(activeUserId)
-                || !studentRecords.containsKey(userId)) {
+        if (activeUserId == null || !studentRecords.containsKey(userId)) {
             throw new Exception("Current user is null or no record matching given user ID.");
         } else {
             String role = permissions.get(activeUserId).getRole();
