@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import edu.sc.csce740.enums.College;
@@ -184,16 +185,16 @@ public class BILL implements BILLIntf {
                     studentRecords.get(userId).setStudent(record.getStudent());
                 }
             } else {
-                try {
-                    StudentRecord oldRecord = getRecord(userId);
-                    if (oldRecord != null && record.getStudent().getId().equals(userId)) {
-                        studentRecords.put(userId, record);
-                    } else {
-                        throw new Exception("You dont have permission to edit other's record.");
-                    }
-                } catch (Exception ex) {
-                    throw ex;
+                StudentRecord oldRecord = getRecord(userId);
+                if (oldRecord != null && record.getStudent().getId().equals(userId)) {
+                    studentRecords.put(userId, record);
+                } else {
+                    throw new Exception("You dont have permission to edit other's record.");
                 }
+            }
+
+            if (permanent) {
+                saveStudentRecords();
             }
         }
     }
@@ -260,6 +261,14 @@ public class BILL implements BILLIntf {
         }
 
         bills.get(userId).makePayment(amount, note);
+    }
+
+    /**
+     * Saves the student records permanently to a file.
+     */
+    private void saveStudentRecords() {
+        String representation = new GsonBuilder().setPrettyPrinting().create().toJson(studentRecords);
+        //TODO - output the string to a file
     }
 
     /**
