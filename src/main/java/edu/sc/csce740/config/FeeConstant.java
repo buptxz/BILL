@@ -1,0 +1,18 @@
+package edu.sc.csce740.config;
+
+public class FeeConstant {
+
+    public static final double GRADUATE_RESIDENT_TUITION_FULL_TIME = 6399;
+    public static final double GRADUATE_RESIDENT_TUITION_PART_TIME = 533.25;
+    public static final double GRADUATE_NONRESIDENT_TUITION_FULL_TIME = 13704;
+    public static final double GRADUATE_NONRESIDENT_TUITION_PART_TIME = 1142;
+    public static final double TECHNOLOGY_FEE_FULL_TIME = 200;
+    public static final double TECHNOLOGY_FEE_PART_TIME = 17;
+
+    public static final String GRADUATE_RESIDENT_TUITION_FULL_TIME_NOTE = "GRADUATE_RESIDENT_TUITION_FULL_TIME";
+    public static final String GRADUATE_RESIDENT_TUITION_PART_TIME_NOTE = "GRADUATE_RESIDENT_TUITION_PART_TIME";
+    public static final String GRADUATE_NONRESIDENT_TUITION_FULL_TIME_NOTE = "GRADUATE_NONRESIDENT_TUITION_FULL_TIME";
+    public static final String GRADUATE_NONRESIDENT_TUITION_PART_TIME_NOTE = "GRADUATE_NONRESIDENT_TUITION_PART_TIME";
+    public static final String TECHNOLOGY_FEE_FULL_TIME_NOTE = "TECHNOLOGY_FEE_FULL_TIME";
+    public static final String TECHNOLOGY_FEE_PART_TIME_NOTE = "TECHNOLOGY_FEE_PART_TIME";
+}
