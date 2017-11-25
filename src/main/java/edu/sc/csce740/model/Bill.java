@@ -4,12 +4,14 @@ import edu.sc.csce740.enums.ClassStatus;
 import edu.sc.csce740.enums.College;
 import edu.sc.csce740.enums.Type;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@ToString
 public class Bill {
     private Student student;
     private College college;
@@ -22,23 +24,23 @@ public class Bill {
         this.college = studentRecord.getCollege();
         this.classStatus = studentRecord.getClassStatus();
         this.transactions = new ArrayList<Transaction>();
-        calculateCharge(studentRecord);
     }
 
     public Bill(Bill currentBill, StudentRecord studentRecord, Date startDate, Date endDate) {
-        this.student = studentRecord.getStudent();
-        this.college = studentRecord.getCollege();
-        this.classStatus = studentRecord.getClassStatus();
-        this.balance = currentBill.getBalance();
-        this.transactions = new ArrayList<Transaction>();
-        for (Transaction transaction : studentRecord.getTransactions()) {
-            if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
-                transactions.add(transaction);
+        this(studentRecord);
+        if (startDate == null) {
+            calculateCharge(studentRecord);
+        } else {
+            this.balance = currentBill.getBalance();
+            for (Transaction transaction : studentRecord.getTransactions()) {
+                if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
+                    transactions.add(transaction);
+                }
             }
-        }
-        for (Transaction transaction : currentBill.getTransactions()) {
-            if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
-                transactions.add(transaction);
+            for (Transaction transaction : currentBill.getTransactions()) {
+                if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
+                    transactions.add(transaction);
+                }
             }
         }
     }
@@ -135,14 +137,14 @@ public class Bill {
         }
 
     }
-
-    public String toString() {
-        String output = "";
-        output += "ID: " + this.getStudent().getId() + "\n";
-        output += "Balance: " + this.getBalance() + "\n\n";
-        for (Transaction transaction : transactions) {
-            output += transaction.toString() + "\n";
-        }
-        return output;
-    }
+//
+//    public String toString() {
+//        String output = "";
+//        output += "ID: " + this.getStudent().getId() + "\n";
+//        output += "Balance: " + this.getBalance() + "\n\n";
+//        for (Transaction transaction : transactions) {
+//            output += transaction.toString() + "\n";
+//        }
+//        return output;
+//    }
 }

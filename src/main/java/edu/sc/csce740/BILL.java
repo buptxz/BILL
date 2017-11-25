@@ -186,7 +186,7 @@ public class BILL implements BILLIntf {
         if (bills.containsKey(userId)) {
             return bills.get(userId);
         } else {
-            Bill currentBill = new Bill(studentRecords.get(userId));
+            Bill currentBill = new Bill(null, studentRecords.get(userId), null, null);
             bills.put(userId, currentBill);
             return currentBill;
         }
@@ -237,7 +237,6 @@ public class BILL implements BILLIntf {
         }
 
         bills.get(userId).makePayment(amount, note);
-
     }
 
     /**
