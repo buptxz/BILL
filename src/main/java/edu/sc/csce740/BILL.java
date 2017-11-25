@@ -253,11 +253,11 @@ public class BILL implements BILLIntf {
             System.out.println(ex);
         }
         String id = "mhunt";
-        billIntf.logIn("mhunt");
+        billIntf.logIn(id);
         System.out.println(billIntf.generateBill(id));
 
-        billIntf.applyPayment("mhunt", new BigDecimal(1000), "Make a 1000 payment");
-        Bill bill = billIntf.viewCharges("mhunt", 1, 1, 2017, 12,31,2017);
+        billIntf.applyPayment(id, new BigDecimal(321.32451), "Make a 1000 payment");
+        Bill bill = billIntf.viewCharges(id, 1, 1, 2017, 12,31,2017);
         System.out.println(bill);
         System.out.print("Done");
 
