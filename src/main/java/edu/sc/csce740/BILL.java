@@ -148,12 +148,13 @@ public class BILL implements BILLIntf {
                     return studentRecords.get(userId);
                 }
             } else {
-                // Check if this admin has the permission to view studentRecords of given userId
-                if (userInfos.get(currentUser).getRole() != userInfos.get(userId).getRole()) {
-                    throw new Exception("You don't have permission to view other student's record.");
-                } else {
-                    return studentRecords.get(userId);
+                List<String> studentIdList = getStudentIDs();
+                for (String studentId: studentIdList) {
+                    if (userId == studentId) {
+                        return studentRecords.get(userId);
+                    }
                 }
+                throw new Exception("You don't have permission to view other student's record.");
             }
         }
     }
