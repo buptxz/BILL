@@ -16,17 +16,27 @@ public class FeeConstant {
     public static final double UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_SIMS_TUITION_PART_TIME = 913.75;
     public static final double UNDERGRADUATE_ACTIVE_DUTY_MILITARY_TUITION_FULL_TIME = 3351;
     public static final double UNDERGRADUATE_ACTIVE_DUTY_MILITARY_TUITION_PART_TIME = 279.25;
-
-    public static final double STUDY_ABROAD = 150;
-    public static final double COHORT_STUDY_ABROAD = 300;
-    public static final double MATRICULATION_FEE = 80;
+    public static final double UNDERGRADUATE_RESIDENT_SCHOLARSHIP_ACTIVE_DUTY_MILITARY_17_HOURS_AND_ABOVE = 80;
+    public static final double UNDERGRADUATE_NONRESIDENT_17_HOURS_AND_ABOVE = 208;
 
     public static final double GRADUATE_RESIDENT_TUITION_FULL_TIME = 6399;
     public static final double GRADUATE_RESIDENT_TUITION_PART_TIME = 533.25;
     public static final double GRADUATE_NONRESIDENT_TUITION_FULL_TIME = 13704;
     public static final double GRADUATE_NONRESIDENT_TUITION_PART_TIME = 1142;
+    public static final double GRADUATE_RESIDENT_17_HOURS_AND_ABOVE = 80;
+    public static final double GRADUATE_NONRESIDENT_17_HOURS_AND_ABOVE = 170;
+
     public static final double TECHNOLOGY_FEE_FULL_TIME = 200;
     public static final double TECHNOLOGY_FEE_PART_TIME = 17;
+
+    public static final double INTERNATIONAL_STUDENT_ENROLLMENT_FEE_ONE_TIME_CHARGE = 750;
+    public static final double STUDY_ABROAD = 150;
+    public static final double COHORT_STUDY_ABROAD = 300;
+    public static final double MATRICULATION_FEE = 80;
+
+    public static final double HEALTH_INSURANCE = 2547;
+    public static final double MANDATORY_STUDY_ABROAD_INSURANCE = 360;
+
 
     public static final String GRADUATE_RESIDENT_TUITION_FULL_TIME_NOTE = "GRADUATE_RESIDENT_TUITION_FULL_TIME";
     public static final String GRADUATE_RESIDENT_TUITION_PART_TIME_NOTE = "GRADUATE_RESIDENT_TUITION_PART_TIME";
