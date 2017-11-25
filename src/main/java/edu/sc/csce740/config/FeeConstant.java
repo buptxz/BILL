@@ -1,7 +1,7 @@
 package edu.sc.csce740.config;
 
 public class FeeConstant {
-    
+
     public static final double UNDERGRADUATE_RESIDENT_TUITION_FULL_TIME = 5727;
     public static final double UNDERGRADUATE_RESIDENT_TUITION_PART_TIME = 477.25;
     public static final double UNDERGRADUATE_NONRESIDENT_TUITION_FULL_TIME = 5727;
