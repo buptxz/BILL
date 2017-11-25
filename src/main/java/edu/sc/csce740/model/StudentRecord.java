@@ -6,11 +6,13 @@ import edu.sc.csce740.enums.InternationalStatus;
 import edu.sc.csce740.enums.Scholarship;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @AllArgsConstructor
 @Getter
+@Setter
 public class StudentRecord {
     private Student student;
     private College college;

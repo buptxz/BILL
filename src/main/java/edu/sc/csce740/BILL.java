@@ -39,7 +39,10 @@ public class BILL implements BILLIntf {
      */
     private Map<String, Bill> bills;
 
-    ClassLoader classLoader = getClass().getClassLoader();
+    /**
+     * A class loader to read files.
+     */
+    private ClassLoader classLoader = getClass().getClassLoader();
 
     public BILL() {
         currentUser = null;
@@ -113,17 +116,15 @@ public class BILL implements BILLIntf {
      * @throws Exception is the current user is not an admin.
      */
     public List<String> getStudentIDs() throws Exception {
-        if (currentUser == null) {
-            throw new Exception("Current user is null, please log in to view student IDs");
-        } else if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
-            throw new Exception("You don't have permission to view student IDs.");
+        if (!validate(currentUser) || userInfos.get(currentUser).getRole() == Role.STUDENT) {
+            throw new Exception("Current user is null or you don't have permission to view student IDs.");
         } else {
             List<String> studentIdList = new ArrayList<String>();
             College currentUserCollege = userInfos.get(currentUser).getCollege();
 
             for (String userId : userInfos.keySet()) {
                 UserInfo userInfo = userInfos.get(userId);
-                if (userId != currentUser && userInfo.getCollege() == currentUserCollege) {
+                if (!userId.equals(currentUser) && userInfo.getCollege() == currentUserCollege) {
                     studentIdList.add(userId);
                 }
             }
@@ -139,12 +140,12 @@ public class BILL implements BILLIntf {
      *      CLASS HEADER.
      */
     public StudentRecord getRecord(String userId) throws Exception {
-        if (currentUser == null || !studentRecords.containsKey(userId)) {
+        if (!validate(currentUser) || !studentRecords.containsKey(userId)) {
             throw new Exception("Current user is null or no record matching given user ID.");
         } else {
             Role role = userInfos.get(currentUser).getRole();
             if (role == Role.STUDENT) {
-                if (currentUser != userId) {
+                if (!currentUser.equals(userId)) {
                     throw new Exception("You don't have permission to view other student's record.");
                 } else {
                     return studentRecords.get(userId);
@@ -152,7 +153,7 @@ public class BILL implements BILLIntf {
             } else {
                 List<String> studentIdList = getStudentIDs();
                 for (String studentId: studentIdList) {
-                    if (userId == studentId) {
+                    if (userId.equals(studentId)) {
                         return studentRecords.get(userId);
                     }
                 }
@@ -172,7 +173,29 @@ public class BILL implements BILLIntf {
      */
     public void editRecord(String userId, StudentRecord record, Boolean permanent)
             throws Exception {
-
+        if (!validate(currentUser)) {
+            throw new Exception("Current user is null.");
+        } else {
+            Role role = userInfos.get(userId).getRole();
+            if (role == Role.STUDENT) {
+                if (!record.getStudent().getId().equals(userId)) {
+                    throw new Exception("You dont have permission to edit other's record.");
+                } else {
+                    studentRecords.get(userId).setStudent(record.getStudent());
+                }
+            } else {
+                try {
+                    StudentRecord oldRecord = getRecord(userId);
+                    if (oldRecord != null && record.getStudent().getId().equals(userId)) {
+                        studentRecords.put(userId, record);
+                    } else {
+                        throw new Exception("You dont have permission to edit other's record.");
+                    }
+                } catch (Exception ex) {
+                    throw ex;
+                }
+            }
+        }
     }
 
     /**
@@ -222,7 +245,7 @@ public class BILL implements BILLIntf {
     }
 
     /**
-     * Makes a payment for the student
+     * Makes a payment for the student.
      * @param userId  the student to make a payment for.
      * @param amount  amount to apply to the balance.
      * @param note  a string indicating the reason for the payment
@@ -237,6 +260,15 @@ public class BILL implements BILLIntf {
         }
 
         bills.get(userId).makePayment(amount, note);
+    }
+
+    /**
+     * Checks the validity of a given user id.
+     * @param userId A string that represents the user id to be checked.
+     * @return True if given user id is valid.
+     */
+    private boolean validate(String userId) {
+        return userId != null;
     }
 
     /**
