@@ -1,5 +1,9 @@
 package edu.sc.csce740.model;
 
+import edu.sc.csce740.enums.ClassStatus;
+import edu.sc.csce740.enums.College;
+import edu.sc.csce740.enums.InternationalStatus;
+import edu.sc.csce740.enums.Scholarship;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

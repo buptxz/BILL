@@ -1,5 +1,8 @@
 package edu.sc.csce740.model;
 
+import edu.sc.csce740.enums.ClassStatus;
+import edu.sc.csce740.enums.College;
+import edu.sc.csce740.enums.Type;
 import lombok.Getter;
 
 import java.math.BigDecimal;

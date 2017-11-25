@@ -10,6 +10,8 @@ import java.util.Map;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
+import edu.sc.csce740.enums.College;
+import edu.sc.csce740.enums.Role;
 import edu.sc.csce740.model.*;
 
 

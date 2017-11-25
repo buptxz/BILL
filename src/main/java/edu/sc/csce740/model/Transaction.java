@@ -1,9 +1,9 @@
 package edu.sc.csce740.model;
 
+import edu.sc.csce740.enums.Type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 
 @Getter
