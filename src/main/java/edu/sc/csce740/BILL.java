@@ -10,26 +10,20 @@ import java.util.Map;
 
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
-import edu.sc.csce740.model.Permission;
-import edu.sc.csce740.model.Bill;
-import edu.sc.csce740.model.ROLE;
-import edu.sc.csce740.model.StudentRecord;
-
-
-import edu.sc.csce740.model.Student;
+import edu.sc.csce740.model.*;
 
 
 public class BILL implements BILLIntf {
     /**
      * Currently active user id.
      */
-    private String activeUserId;
+    private String currentUser;
 
     /**
-     * A hash map used to store {@link Permission}
+     * A hash map used to store {@link UserInfo}
      * Key: String of user id
      */
-    private Map<String, Permission> permissions;
+    private Map<String, UserInfo> userInfos;
 
     /**
      * A hash map used to store {@link StudentRecord}
@@ -46,23 +40,23 @@ public class BILL implements BILLIntf {
     ClassLoader classLoader = getClass().getClassLoader();
 
     public BILL() {
-        activeUserId = null;
-        permissions = new HashMap<String, Permission>();
+        currentUser = null;
+        userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
         bills = new HashMap<String, Bill>();
     }
 
     /**
-     * Loads the list of system usernames and permissions.
+     * Loads the list of system usernames and userInfos.
      * @param usersFile the filename of the users file.
      * @throws Exception for I/O errors.  SEE NOTE IN CLASS HEADER.
      */
     public void loadUsers(String usersFile) throws Exception {
-        List<Permission> permissionsList =
+        List<UserInfo> userInfosList =
                 new Gson().fromJson( new FileReader(new File(classLoader.getResource(usersFile).getFile())),
-                        new TypeToken<List<Permission>>(){}.getType());
-        for (Permission permission : permissionsList) {
-            permissions.put(permission.getId(), permission);
+                        new TypeToken<List<UserInfo>>(){}.getType());
+        for (UserInfo permission : userInfosList) {
+            userInfos.put(permission.getId(), permission);
         }
     }
 
@@ -87,10 +81,10 @@ public class BILL implements BILLIntf {
      * @throws Exception  if the user id is invalid.  SEE NOTE IN CLASS HEADER.
      */
     public void logIn(String userId) throws Exception {
-        if (!permissions.containsKey(userId)) {
+        if (!userInfos.containsKey(userId)) {
             throw new Exception("Not a valid user.");
         } else {
-            this.activeUserId = userId;
+            this.currentUser = userId;
         }
     }
 
@@ -99,7 +93,7 @@ public class BILL implements BILLIntf {
      * @throws Exception  if the user id is invalid.  SEE NOTE IN CLASS HEADER.
      */
     public void logOut() throws Exception {
-        this.activeUserId = null;
+        this.currentUser = null;
     }
 
     /**
@@ -107,7 +101,7 @@ public class BILL implements BILLIntf {
      * @return  the user id of the user currently using the system.
      */
     public String getUser() {
-        return this.activeUserId;
+        return this.currentUser;
     }
 
     /**
@@ -117,17 +111,17 @@ public class BILL implements BILLIntf {
      * @throws Exception is the current user is not an admin.
      */
     public List<String> getStudentIDs() throws Exception {
-        if (activeUserId == null) {
+        if (currentUser == null) {
             throw new Exception("Current user is null, please log in to view student IDs");
-        } else if (permissions.get(activeUserId).getRole() == "STUDENT") {
+        } else if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
             throw new Exception("You don't have permission to view student IDs.");
         } else {
             List<String> studentIdList = new ArrayList<String>();
-            String currentUserCollege = permissions.get(activeUserId).getCollege();
+            College currentUserCollege = userInfos.get(currentUser).getCollege();
 
-            for (String userId : permissions.keySet()) {
-                Permission userPermission = permissions.get(userId);
-                if (userId != activeUserId && userPermission.getCollege() == currentUserCollege) {
+            for (String userId : userInfos.keySet()) {
+                UserInfo userInfo = userInfos.get(userId);
+                if (userId != currentUser && userInfo.getCollege() == currentUserCollege) {
                     studentIdList.add(userId);
                 }
             }
@@ -143,19 +137,19 @@ public class BILL implements BILLIntf {
      *      CLASS HEADER.
      */
     public StudentRecord getRecord(String userId) throws Exception {
-        if (activeUserId == null || !studentRecords.containsKey(userId)) {
+        if (currentUser == null || !studentRecords.containsKey(userId)) {
             throw new Exception("Current user is null or no record matching given user ID.");
         } else {
-            String role = permissions.get(activeUserId).getRole();
-            if (role == ROLE.STUDENT.name()) {
-                if (activeUserId != userId) {
+            Role role = userInfos.get(currentUser).getRole();
+            if (role == Role.STUDENT) {
+                if (currentUser != userId) {
                     throw new Exception("You don't have permission to view other student's record.");
                 } else {
                     return studentRecords.get(userId);
                 }
             } else {
                 // Check if this admin has the permission to view studentRecords of given userId
-                if (permissions.get(activeUserId).getRole() != permissions.get(userId).getRole()) {
+                if (userInfos.get(currentUser).getRole() != userInfos.get(userId).getRole()) {
                     throw new Exception("You don't have permission to view other student's record.");
                 } else {
                     return studentRecords.get(userId);
@@ -186,7 +180,13 @@ public class BILL implements BILLIntf {
      * SEE NOTE IN CLASS HEADER.
      */
     public Bill generateBill(String userId) throws Exception {
-        return new Bill(new Student(), "1", "2");
+        if (bills.containsKey(userId)) {
+            return bills.get(userId);
+        } else {
+            Bill currentBill = new Bill(studentRecords.get(userId));
+            bills.put(userId, currentBill);
+            return currentBill;
+        }
     }
 
     /**
@@ -205,7 +205,17 @@ public class BILL implements BILLIntf {
     public Bill viewCharges(String userId, int startMonth, int startDay, int startYear,
                             int endMonth, int endDay, int endYear)
             throws Exception {
-        return new Bill(new Student(), "1", "2");
+        Date startDate = new Date(startMonth, startDay, startYear);
+        Date endDate = new Date(endMonth, endDay, endYear);
+        if (!Date.isBefore(startDate, endDate)) {
+            throw new Exception();
+        } else {
+            if (!bills.containsKey(userId)) {
+                generateBill(userId);
+            }
+            return new Bill(bills.get(userId), studentRecords.get(userId), startDate, endDate);
+        }
+
     }
 
     /**
@@ -219,6 +229,37 @@ public class BILL implements BILLIntf {
      */
     public void applyPayment(String userId, BigDecimal amount, String note)
             throws Exception {
+        if (!bills.containsKey(userId)) {
+            generateBill(userId);
+        }
+
+        bills.get(userId).makePayment(amount, note);
+
+    }
+
+    /**
+     * Test the BILL back end system
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+
+        BILLIntf billIntf = new BILL();
+
+        try {
+            billIntf.loadUsers("file/users.txt");
+            billIntf.loadRecords("file/students.txt");
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        String id = "mhunt";
+        billIntf.logIn("mhunt");
+        System.out.println(billIntf.generateBill(id));
+
+        billIntf.applyPayment("mhunt", new BigDecimal(1000), "Make a 1000 payment");
+        Bill bill = billIntf.viewCharges("mhunt", 1, 1, 2017, 12,31,2017);
+        System.out.println(bill);
+        System.out.print("Done");
 
     }
 }

@@ -9,20 +9,20 @@ import java.util.List;
 @Getter
 public class StudentRecord {
     private Student student;
-    private String college;
+    private College college;
     private Term termBegan;
     private Term capstoneEnrolled;
-    private String classStatus;
-    private boolean gradAssistant;
-    private boolean international;
-    private String internationalStatus;
-    private boolean resident;
-    private boolean activeDuty;
-    private boolean veteran;
-    private boolean freeTuition;
-    private String scholarship;
-    private String studyAboard;
-    private boolean nationalStudentExchange;
+    private ClassStatus classStatus;
+    private Boolean gradAssistant;
+    private Boolean international;
+    private InternationalStatus internationalStatus;
+    private Boolean resident;
+    private Boolean activeDuty;
+    private Boolean veteran;
+    private Boolean freeTuition;
+    private Scholarship scholarship;
+    private StudentRecord studyAboard;
+    private Boolean nationalStudentExchange;
     private List<Course> courses;
     private List<Transaction> transactions;
 }

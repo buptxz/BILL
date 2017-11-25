@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Permission {
+public class UserInfo {
     private String id;
     private String firstName;
     private String lastName;
-    private String role;
-    private String college;
+    private Role role;
+    private College college;
 }

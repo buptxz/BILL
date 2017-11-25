@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Term {
-    private String semester;
+    private Semester semester;
     private int year;
 }
