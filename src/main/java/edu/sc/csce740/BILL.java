@@ -1,5 +1,6 @@
 package edu.sc.csce740;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.io.FileReader;
 import java.io.File;
@@ -13,6 +14,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import edu.sc.csce740.enums.College;
 import edu.sc.csce740.enums.Role;
+import edu.sc.csce740.exception.IllegalPermissionException;
+import edu.sc.csce740.exception.InvalidUserException;
 import edu.sc.csce740.model.*;
 
 
@@ -55,9 +58,10 @@ public class BILL implements BILLIntf {
     /**
      * Loads the list of system usernames and userInfos.
      * @param usersFile the filename of the users file.
-     * @throws Exception for I/O errors.  SEE NOTE IN CLASS HEADER.
+     * @throws FileNotFoundException Encounters when file is not found in given location.
+     * @throws NullPointerException Encounters when parsing the file.
      */
-    public void loadUsers(String usersFile) throws Exception {
+    public void loadUsers(String usersFile) throws FileNotFoundException, NullPointerException {
         List<UserInfo> userInfosList =
                 new Gson().fromJson( new FileReader(new File(classLoader.getResource(usersFile).getFile())),
                         new TypeToken<List<UserInfo>>(){}.getType());
@@ -69,9 +73,10 @@ public class BILL implements BILLIntf {
     /**
      * Loads the list of system transcripts.
      * @param recordsFile the filename of the transcripts file.
-     * @throws Exception for I/O errors.  SEE NOTE IN CLASS HEADER.
+     * @throws FileNotFoundException Encounters when file is not found in given location.
+     * @throws NullPointerException Encounters when parsing the file.
      */
-    public void loadRecords(String recordsFile) throws Exception {
+    public void loadRecords(String recordsFile) throws FileNotFoundException, NullPointerException {
         List<StudentRecord> studentRecordsList =
                 new Gson().fromJson( new FileReader(new File(classLoader.getResource(recordsFile).getFile())),
                         new TypeToken<List<StudentRecord>>(){}.getType());
@@ -84,11 +89,11 @@ public class BILL implements BILLIntf {
     /**
      * Sets the user id of the user currently using the system.
      * @param userId  the id of the user to log in.
-     * @throws Exception  if the user id is invalid.  SEE NOTE IN CLASS HEADER.
+     * @throws InvalidUserException Encounters if the user id is invalid.
      */
-    public void logIn(String userId) throws Exception {
+    public void logIn(String userId) throws InvalidUserException {
         if (!userInfos.containsKey(userId)) {
-            throw new Exception("Not a valid user.");
+            throw new InvalidUserException("Not a valid user.");
         } else {
             this.currentUser = userId;
         }
@@ -96,9 +101,12 @@ public class BILL implements BILLIntf {
 
     /**
      * Closes the current session, logs the user out, and clears any session data.
-     * @throws Exception  if the user id is invalid.  SEE NOTE IN CLASS HEADER.
+     * @throws InvalidUserException Encounters if the user id is invalid.
      */
-    public void logOut() throws Exception {
+    public void logOut() throws InvalidUserException {
+        if (!validate(currentUser)) {
+            throw new InvalidUserException("Not a valid user.");
+        }
         this.currentUser = null;
     }
 
@@ -114,11 +122,14 @@ public class BILL implements BILLIntf {
      * Gets a list of the userIds of the students that an admin can view.
      * @return a list containing the userId of for each student in the
      *      college belonging to the current user
-     * @throws Exception is the current user is not an admin.
+     * @throws InvalidUserException Encounters if the user id is invalid.
+     * @throws IllegalPermissionException is the current user is not an admin.
      */
-    public List<String> getStudentIDs() throws Exception {
-        if (!validate(currentUser) || userInfos.get(currentUser).getRole() == Role.STUDENT) {
-            throw new Exception("Current user is null or you don't have permission to view student IDs.");
+    public List<String> getStudentIDs() throws InvalidUserException, IllegalPermissionException {
+        if (!validate(currentUser)) {
+            throw new InvalidUserException("Current user is null");
+        } else if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
+            throw new IllegalPermissionException("You don't have permission to view student IDs.");
         } else {
             List<String> studentIdList = new ArrayList<String>();
             College currentUserCollege = userInfos.get(currentUser).getCollege();
