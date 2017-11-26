@@ -309,6 +309,17 @@ public class Bill {
             addCharge(FeeConstant.MATRICULATION_FEE,
                     "MATRICULATION FEE");
         }
+
+        // Engineering
+        if (studentRecord.getCollege() == College.ENGINEERING_AND_COMPUTING) {
+            if (isFullTime) {
+                addCharge(FeeConstant.ENGINEERING_AND_COMPUTING_PROGRAM_FEE_FULL_TIME,
+                        "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER");
+            } else {
+                addCharge(FeeConstant.ENGINEERING_AND_COMPUTING_PROGRAM_FEE_PART_TIME * totalCredit,
+                        "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER");
+            }
+        }
     }
 
     /**
