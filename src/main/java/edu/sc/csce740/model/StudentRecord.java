@@ -1,9 +1,6 @@
 package edu.sc.csce740.model;
 
-import edu.sc.csce740.enums.ClassStatus;
-import edu.sc.csce740.enums.College;
-import edu.sc.csce740.enums.InternationalStatus;
-import edu.sc.csce740.enums.Scholarship;
+import edu.sc.csce740.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,8 +24,9 @@ public class StudentRecord {
     private Boolean veteran;
     private Boolean freeTuition;
     private Scholarship scholarship;
-    private StudentRecord studyAboard;
+    private StudyAbroad studyAboard;
     private Boolean nationalStudentExchange;
+    private Boolean outsideInsurance;
     private List<Course> courses;
     private List<Transaction> transactions;
 }

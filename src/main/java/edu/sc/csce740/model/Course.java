@@ -9,5 +9,5 @@ public class Course {
     private String name;
     private String id;
     private int numCredits;
-    private boolean online;
+    private Boolean online;
 }
