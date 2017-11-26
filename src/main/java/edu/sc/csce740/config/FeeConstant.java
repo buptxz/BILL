@@ -3,6 +3,10 @@ package edu.sc.csce740.config;
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * A class to store the fees and tuition constants.
+ * Change the constants when fess change.
+ */
 public class FeeConstant {
     // Undergraduate tuition
     public static final double UNDERGRADUATE_RESIDENT_TUITION_FULL_TIME = 5727;

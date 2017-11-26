@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 
+/**
+ * This is used to output the bill information.
+ */
 @Getter
 @Setter
 @ToString
@@ -346,7 +349,7 @@ public class Bill {
      * Make a payment
      * @param amount
      * @param note
-     * @throws Exception
+     * @throws InvalidPaymentException
      */
     public void makePayment(BigDecimal amount, String note) throws InvalidPaymentException {
         if (amount.compareTo(new BigDecimal(0)) <= 0) {
