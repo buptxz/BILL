@@ -56,8 +56,8 @@ public class BILL implements BILLIntf {
         userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
         bills = new HashMap<String, Bill>();
-        loadUsers("file/users.txt");
-        loadRecords("file/students.txt");
+//        loadUsers("file/users.txt");
+//        loadRecords("file/students.txt");
     }
 
     /**
@@ -85,7 +85,7 @@ public class BILL implements BILLIntf {
     /**
      * Loads the list of system transcripts.
      * @param recordsFile the filename of the transcripts file.
-     * @throws InvalidRecordException if errors happen when loading user records to the system.
+     * @throws FileNotFoundException if errors happen when loading user records to the system.
      */
     public void loadRecords(String recordsFile) throws FileNotFoundException {
         try {
