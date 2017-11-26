@@ -26,20 +26,24 @@ public class Bill {
         this.transactions = new ArrayList<Transaction>();
     }
 
-    public Bill(Bill currentBill, StudentRecord studentRecord, Date startDate, Date endDate) {
+    public Bill(StudentRecord studentRecord, Bill currentBill, Date startDate, Date endDate) {
         this(studentRecord);
         if (startDate == null) {
             calculateCharge(studentRecord);
         } else {
             this.balance = currentBill.getBalance();
-            for (Transaction transaction : studentRecord.getTransactions()) {
-                if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
-                    transactions.add(transaction);
+            if (studentRecord.getTransactions() != null) {
+                for (Transaction transaction : studentRecord.getTransactions()) {
+                    if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
+                        transactions.add(transaction);
+                    }
                 }
             }
-            for (Transaction transaction : currentBill.getTransactions()) {
-                if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
-                    transactions.add(transaction);
+            if (currentBill.getTransactions() != null) {
+                for (Transaction transaction : currentBill.getTransactions()) {
+                    if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
+                        transactions.add(transaction);
+                    }
                 }
             }
         }
@@ -58,9 +62,6 @@ public class Bill {
 
         // Check technology fee
         calculateOtherFee(studentRecord, totalCredit);
-
-
-
     }
 
     private int checkCourse(StudentRecord studentRecord) {
@@ -262,7 +263,10 @@ public class Bill {
                             "GRADUATE STUDENTS - (6 TO 8 HOURS) - REQUIRED STUDENT HEALTH CENTER FEE - PER SEMESTER");
                 }
             }
-        } else {
+        } else if (studentRecord.getClassStatus() == ClassStatus.FRESHMAN ||
+                studentRecord.getClassStatus() == ClassStatus.SOPHOMORE ||
+                studentRecord.getClassStatus() == ClassStatus.JUNIOR ||
+                studentRecord.getClassStatus() == ClassStatus.SENIOR){
             if (totalCredit >= 6 && totalCredit <= 11) {
                 addCharge(FeeConstant.UNDERGRADUATE_STUDENTS_6_TO_11_HOURS_REQUIRED_STUDENT_HEALTH_CENTER_FEE_PER_SEMESTER,
                         "UNDERGRADUATE STUDENTS - (6 TO 11 HOURS) - REQUIRED STUDENT HEALTH CENTER FEE - PER SEMESTER");
@@ -271,7 +275,7 @@ public class Bill {
 
         // International
         if (studentRecord.getInternational()) {
-            if (isFirstSemeter(studentRecord.getTermBegan().getSemester(), studentRecord.getTermBegan().getYear())) {
+            if (isFirstSemester(studentRecord.getTermBegan().getSemester(), studentRecord.getTermBegan().getYear())) {
                 addCharge(FeeConstant.INTERNATIONAL_STUDENT_ENROLLMENT_FEE_ONE_TIME_CHARGE,
                         "INTERNATIONAL STUDENT ENROLLMENT FEE - ONE TIME CHARGE");
             }
@@ -305,7 +309,7 @@ public class Bill {
         }
 
         // MATRICULATION_FEE
-        if (isFirstSemeter(studentRecord.getTermBegan().getSemester(), studentRecord.getTermBegan().getYear())) {
+        if (isFirstSemester(studentRecord.getTermBegan().getSemester(), studentRecord.getTermBegan().getYear())) {
             addCharge(FeeConstant.MATRICULATION_FEE,
                     "MATRICULATION FEE");
         }
@@ -353,22 +357,22 @@ public class Bill {
 
     }
 
-    private boolean isFirstSemeter(Semester startSemester, int startYear) {
+    private boolean isFirstSemester(Semester startSemester, int startYear) {
         Calendar now = Calendar.getInstance();
-        Semester currentSemeter;
+        Semester currentSemester;
         Date currentDate = new Date(now.get(Calendar.MONTH) + 1,
                 now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.YEAR));
         Date date1 = new Date(5, 15, now.get(Calendar.YEAR));
         Date date2 = new Date(8, 15, now.get(Calendar.YEAR));
         if (currentDate.isBefore(date1)) {
-            currentSemeter = Semester.SPRING;
+            currentSemester = Semester.SPRING;
         } else if (date2.isBefore(currentDate)) {
-            currentSemeter = Semester.FALL;
+            currentSemester = Semester.FALL;
         } else {
-            currentSemeter = Semester.SUMMER;
+            currentSemester = Semester.SUMMER;
         }
 
-        if (startYear == now.get(Calendar.YEAR) && startSemester == currentSemeter) {
+        if (startYear == now.get(Calendar.YEAR) && startSemester == currentSemester) {
             return true;
         } else {
             return false;

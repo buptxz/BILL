@@ -50,11 +50,13 @@ public class BILL implements BILLIntf {
      */
     private ClassLoader classLoader = getClass().getClassLoader();
 
-    public BILL() {
+    public BILL() throws LoadUserException, LoadRecordException {
         currentUser = null;
         userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
         bills = new HashMap<String, Bill>();
+        loadUsers("file/users.txt");
+        loadRecords("file/students.txt");
     }
 
     /**
@@ -237,7 +239,7 @@ public class BILL implements BILLIntf {
         if (bills.containsKey(userId)) {
             return bills.get(userId);
         } else {
-            final Bill currentBill = new Bill(null, studentRecords.get(userId), null, null);
+            final Bill currentBill = new Bill(studentRecords.get(userId), null, null, null);
             bills.put(userId, currentBill);
             return currentBill;
         }
@@ -267,7 +269,7 @@ public class BILL implements BILLIntf {
             if (!bills.containsKey(userId)) {
                 generateBill(userId);
             }
-            return new Bill(bills.get(userId), studentRecords.get(userId), startDate, endDate);
+            return new Bill(studentRecords.get(userId), bills.get(userId), startDate, endDate);
         }
 
     }
@@ -319,12 +321,6 @@ public class BILL implements BILLIntf {
 
         BILLIntf billIntf = new BILL();
 
-        try {
-            billIntf.loadUsers("file/users.txt");
-            billIntf.loadRecords("file/students.txt");
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
         String id = "mhunt";
         billIntf.logIn(id);
         System.out.println(billIntf.generateBill(id));
