@@ -8,5 +8,6 @@ public class TestConstant {
     public static final String ADMIN_ID = "rbob";
     public static final String GRADUATE_SCHOOL_USER_ID = "mmatthews";
     public static final String STUDENT_ID = "mhunt";
+    public static final String STUDENT_ID_TEST_BILL = "cizhen";
     public static final String INVALID_USER_ID = "noSuchUserId";
 }

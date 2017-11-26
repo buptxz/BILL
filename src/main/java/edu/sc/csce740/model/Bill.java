@@ -25,15 +25,12 @@ public class Bill {
     private double balance;
     private List<Transaction> transactions;
 
-    public Bill(StudentRecord studentRecord) {
+    public Bill(StudentRecord studentRecord, Bill currentBill, Date startDate, Date endDate) {
         this.student = studentRecord.getStudent();
         this.college = studentRecord.getCollege();
         this.classStatus = studentRecord.getClassStatus();
         this.transactions = new ArrayList<Transaction>();
-    }
 
-    public Bill(StudentRecord studentRecord, Bill currentBill, Date startDate, Date endDate) {
-        this(studentRecord);
         if (startDate == null) {
             calculateCharge(studentRecord);
         } else {
