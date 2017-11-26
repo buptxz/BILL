@@ -22,25 +22,25 @@ public class BILL implements BILLIntf {
     /**
      * Currently active user id.
      */
-    private String currentUser;
+    String currentUser;
 
     /**
      * A hash map used to store {@link UserInfo}
      * Key: String of user id
      */
-    private Map<String, UserInfo> userInfos;
+    Map<String, UserInfo> userInfos;
 
     /**
      * A hash map used to store {@link StudentRecord}
      * Key: String of user id
      */
-    private Map<String, StudentRecord> studentRecords;
+    Map<String, StudentRecord> studentRecords;
 
     /**
      *  A hash map used to store {@link Bill}
      *  Key: String of user id
      */
-    private Map<String, Bill> bills;
+    Map<String, Bill> bills;
 
     /**
      * A class loader to read files.
@@ -72,9 +72,9 @@ public class BILL implements BILLIntf {
                             new TypeToken<List<UserInfo>>() {
                             }.getType());
             for (UserInfo userInfo : userInfosList) {
-                if (userInfos.containsKey(userInfo.getId())) {
-                    throw new DuplicateRecordException();
-                }
+//                if (userInfos.containsKey(userInfo.getId())) {
+//                    throw new DuplicateRecordException();
+//                }
                 userInfos.put(userInfo.getId(), userInfo);
             }
         } catch (NullPointerException ex) {
@@ -95,9 +95,9 @@ public class BILL implements BILLIntf {
                             }.getType());
 
             for (StudentRecord studentRecord : studentRecordsList) {
-                if (studentRecords.containsKey(studentRecord.getStudent().getId())) {
-                    throw new DuplicateRecordException();
-                }
+//                if (studentRecords.containsKey(studentRecord.getStudent().getId())) {
+//                    throw new DuplicateRecordException();
+//                }
                 studentRecords.put(studentRecord.getStudent().getId(), studentRecord);
             }
         } catch (NullPointerException ex) {
@@ -137,9 +137,9 @@ public class BILL implements BILLIntf {
      * Gets a list of the userIds of the students that an admin can view.
      * @return a list containing the userId of for each student in the
      *      college belonging to the current user
-     * @throws StudentIdNotFoundException if errors happen when getting student id list.
+     * @throws NoFoundStudentIdException if errors happen when getting student id list.
      */
-    public List<String> getStudentIDs() throws StudentIdNotFoundException {
+    public List<String> getStudentIDs() throws NoFoundStudentIdException {
         try {
             validateLoggedInUser();
 
@@ -168,7 +168,7 @@ public class BILL implements BILLIntf {
                 return studentIdList;
             }
         } catch (Exception ex) {
-            throw new StudentIdNotFoundException("Either no student id is found or encounters errors when " +
+            throw new NoFoundStudentIdException("Either no student id is found or encounters errors when " +
                     "getting student ids: " + ex);
         }
     }
@@ -184,10 +184,10 @@ public class BILL implements BILLIntf {
             validateLoggedInUser();
             validatePermission(userId);
             validateUser(userId, studentRecords.keySet());
+            return studentRecords.get(userId);
         } catch (Exception ex) {
             throw new NoFoundRecordException("Errors happen when getting student records: " + ex);
         }
-        return studentRecords.get(userId);
     }
 
     /**
@@ -354,7 +354,7 @@ public class BILL implements BILLIntf {
      */
     private void validatePermission(String userId)
             throws InvalidUserException, PermissionDeniedException
-            , NoLoggedInUserException, StudentIdNotFoundException {
+            , NoLoggedInUserException, NoFoundStudentIdException {
         validateUser(userId, userInfos.keySet());
 
         if (userInfos.get(currentUser).getRole() == Role.STUDENT) {

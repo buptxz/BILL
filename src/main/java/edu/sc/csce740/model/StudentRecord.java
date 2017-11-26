@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @Setter
 public class StudentRecord {
@@ -29,4 +28,8 @@ public class StudentRecord {
     private Boolean outsideInsurance;
     private List<Course> courses;
     private List<Transaction> transactions;
+
+    public StudentRecord(Student student) {
+        this.student = student;
+    }
 }
