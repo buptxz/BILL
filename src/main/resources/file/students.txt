@@ -14,7 +14,7 @@
     "college": "ARTS_AND_SCIENCES",
     "termBegan": {
       "semester": "FALL",
-      "year": 2017
+      "year": 2016
     },
     "classStatus": "PHD",
     "gradAssistant": true,
@@ -46,12 +46,6 @@
             "id": "DANCE 577",
             "numCredits": 4,
             "online": false
-        },
-        {
-            "name": "Intro to Computer Science",
-            "id": "CSCE 101",
-            "numCredits": 3,
-            "online": true
         }
     ],
     "transactions": [

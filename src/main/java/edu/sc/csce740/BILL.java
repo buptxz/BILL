@@ -1,23 +1,18 @@
 package edu.sc.csce740;
 
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.math.BigDecimal;
-import java.io.FileReader;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
-import edu.sc.csce740.enums.ClassStatus;
-import edu.sc.csce740.enums.College;
-import edu.sc.csce740.enums.Role;
-import edu.sc.csce740.exception.IllegalPermissionException;
-import edu.sc.csce740.exception.InvalidUserException;
-import edu.sc.csce740.exception.InvalidRecordException;
+import edu.sc.csce740.enums.*;
+import edu.sc.csce740.exception.*;
 import edu.sc.csce740.model.*;
 
 
@@ -45,12 +40,18 @@ public class BILL implements BILLIntf {
      */
     private Map<String, Bill> bills;
 
+//    private Set<String>
+
     /**
      * A class loader to read files.
      */
     private ClassLoader classLoader = getClass().getClassLoader();
 
-    public BILL() throws InvalidUserException, InvalidRecordException {
+    /**
+     * Constructor
+     * @throws FileNotFoundException
+     */
+    public BILL() throws FileNotFoundException {
         currentUser = null;
         userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
@@ -64,17 +65,20 @@ public class BILL implements BILLIntf {
      * @param usersFile the filename of the users file.
      * @throws InvalidUserException when loading users to the system.
      */
-    public void loadUsers(String usersFile) throws InvalidUserException {
+    public void loadUsers(String usersFile) throws FileNotFoundException {
         try {
             final List<UserInfo> userInfosList =
                     new Gson().fromJson(new FileReader(new File(classLoader.getResource(usersFile).getFile())),
                             new TypeToken<List<UserInfo>>() {
                             }.getType());
-            for (UserInfo permission : userInfosList) {
-                userInfos.put(permission.getId(), permission);
+            for (UserInfo userInfo : userInfosList) {
+                if (userInfos.containsKey(userInfo.getId())) {
+                    throw new DuplicateRecordException();
+                }
+                userInfos.put(userInfo.getId(), userInfo);
             }
-        } catch (FileNotFoundException ex) {
-            throw new InvalidUserException("Encounters errors when loading users to the systen: " + ex.getMessage());
+        } catch (NullPointerException ex) {
+            throw new FileNotFoundException("Encounters errors when loading users to the system: " + ex.getMessage());
         }
     }
 
@@ -83,7 +87,7 @@ public class BILL implements BILLIntf {
      * @param recordsFile the filename of the transcripts file.
      * @throws InvalidRecordException if errors happen when loading user records to the system.
      */
-    public void loadRecords(String recordsFile) throws InvalidRecordException {
+    public void loadRecords(String recordsFile) throws FileNotFoundException {
         try {
             final List<StudentRecord> studentRecordsList =
                     new Gson().fromJson(new FileReader(new File(classLoader.getResource(recordsFile).getFile())),
@@ -91,10 +95,13 @@ public class BILL implements BILLIntf {
                             }.getType());
 
             for (StudentRecord studentRecord : studentRecordsList) {
+                if (studentRecords.containsKey(studentRecord.getStudent().getId())) {
+                    throw new DuplicateRecordException();
+                }
                 studentRecords.put(studentRecord.getStudent().getId(), studentRecord);
             }
-        } catch (FileNotFoundException ex) {
-            throw new InvalidRecordException("Encounters errors when loading student records to the systen: " + ex.getMessage());
+        } catch (NullPointerException ex) {
+            throw new FileNotFoundException("Encounters errors when loading student records to the systen: " + ex.getMessage());
         }
     }
 
@@ -104,7 +111,7 @@ public class BILL implements BILLIntf {
      * @throws InvalidUserException Encounters if the user id is invalid.
      */
     public void logIn(String userId) throws InvalidUserException {
-        validateUser(userId);
+        validateUser(userId, userInfos.keySet());
         this.currentUser = userId;
     }
 
@@ -112,8 +119,8 @@ public class BILL implements BILLIntf {
      * Closes the current session, logs the user out, and clears any session data.
      * @throws InvalidUserException if the user id is invalid.
      */
-    public void logOut() throws InvalidUserException {
-        validateUser(currentUser);
+    public void logOut() throws NoLoggedInUserException {
+        validateLoggedInUser();
         this.currentUser = null;
     }
 
@@ -130,29 +137,31 @@ public class BILL implements BILLIntf {
      * @return a list containing the userId of for each student in the
      *      college belonging to the current user
      * @throws InvalidUserException if the user id is invalid.
-     * @throws IllegalPermissionException if the current user is not an admin.
+     * @throws PermissionDeniedException if the current user is not an admin.
      */
-    public List<String> getStudentIDs() throws InvalidUserException, IllegalPermissionException {
-        validateUser(currentUser);
+    public List<String> getStudentIDs() throws NoLoggedInUserException, PermissionDeniedException {
+        validateLoggedInUser();
+
         if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
-            throw new IllegalPermissionException("You don't have permission to view student IDs.");
+            throw new PermissionDeniedException("You don't have permission to get student IDs.");
         } else {
+            // Admin
             List<String> studentIdList = new ArrayList<String>();
-            final College currentUserCollege = userInfos.get(currentUser).getCollege();
+            final College currentAdminCollege = userInfos.get(currentUser).getCollege();
 
             /*
                If this is a ADMIN and from Graduate School, he can view all graduate students' records.
                If this is an ADMIN but not from Graduate School, he can only view students' records from
                his college.
             */
-            for (String userId: studentRecords.keySet()) {
-                StudentRecord studentRecord = studentRecords.get(userId);
+            for (String studentUserId: studentRecords.keySet()) {
+                StudentRecord studentRecord = studentRecords.get(studentUserId);
                 ClassStatus studentClassStatus = studentRecord.getClassStatus();
 
-                if ((currentUserCollege == College.GRADUATE_SCHOOL
+                if ((currentAdminCollege == College.GRADUATE_SCHOOL
                         && (studentClassStatus == ClassStatus.MASTERS || studentClassStatus == ClassStatus.PHD))
-                        || (currentUserCollege == studentRecord.getCollege())) {
-                    studentIdList.add(userId);
+                        || (currentAdminCollege == studentRecord.getCollege())) {
+                    studentIdList.add(studentUserId);
                 }
             }
 
@@ -165,32 +174,15 @@ public class BILL implements BILLIntf {
      * @param userId  the identifier of the student.
      * @return the student record data.
      * @throws InvalidUserException if the user id is invalid.
-     * @throws IllegalPermissionException if the current user does not have permission
+     * @throws PermissionDeniedException if the current user does not have permission
      *              to view the record of given user id.
      */
     public StudentRecord getRecord(String userId)
-            throws InvalidUserException, IllegalPermissionException {
-        validateUser(currentUser);
-        if (!studentRecords.containsKey(userId)) {
-            throw new InvalidUserException("Current user is null or no record matching given user ID.");
-        } else {
-            final Role role = userInfos.get(currentUser).getRole();
-            if (role == Role.STUDENT) {
-                if (!currentUser.equals(userId)) {
-                    throw new InvalidUserException("You don't have permission to view other student's record.");
-                } else {
-                    return studentRecords.get(userId);
-                }
-            } else {
-                List<String> studentIdList = getStudentIDs();
-                for (String studentId: studentIdList) {
-                    if (userId.equals(studentId)) {
-                        return studentRecords.get(userId);
-                    }
-                }
-                throw new IllegalPermissionException("You don't have permission to view other student's record.");
-            }
-        }
+            throws NoLoggedInUserException, PermissionDeniedException, InvalidUserException  {
+        validateLoggedInUser();
+        validatePermission(userId);
+        validateUser(userId, studentRecords.keySet());
+        return studentRecords.get(userId);
     }
 
     /**
@@ -200,26 +192,48 @@ public class BILL implements BILLIntf {
      * @param permanent  a status flag indicating whether (if false) to make a
      * temporary edit to the in-memory structure or (if true) a permanent edit.
      * @throws InvalidUserException if the user id is invalid.
-     * @throws IllegalPermissionException if the current user does not have permission
+     * @throws PermissionDeniedException if the current user does not have permission
      *              to view the record of given user id.
      * @throws InvalidRecordException if the transcript data could not be saved.
      */
     public void editRecord(String userId, StudentRecord record, Boolean permanent)
-            throws InvalidUserException, IllegalPermissionException, InvalidRecordException {
-        validateUser(currentUser);
-        final Role role = userInfos.get(userId).getRole();
+            throws NoLoggedInUserException, PermissionDeniedException,
+            InvalidUserException, InvalidRecordException, IOException {
+        if (record == null) {
+            return;
+        }
+
+        validateLoggedInUser();
+        validatePermission(userId);
+        validateUser(userId, studentRecords.keySet());
+
+        final Role role = userInfos.get(currentUser).getRole();
         if (role == Role.STUDENT) {
-            if (!record.getStudent().getId().equals(userId)) {
-                throw new IllegalPermissionException("You dont have permission to edit other's record.");
-            } else {
-                studentRecords.get(userId).setStudent(record.getStudent());
-            }
+            studentRecords.get(userId).setStudent(record.getStudent());
         } else {
             StudentRecord oldRecord = getRecord(userId);
             if (oldRecord != null && record.getStudent().getId().equals(userId)) {
                 studentRecords.put(userId, record);
+
+                // TODO Re-generate bill
+                if (bills.containsKey(userId)) {
+                    double totalPayment = 0;
+                    List<Transaction> paymentHistory = new ArrayList<Transaction>();
+                    for (Transaction transactionHistory : bills.get(userId).getTransactions()) {
+                        if (transactionHistory.getType() == Type.PAYMENT) {
+                            paymentHistory.add(transactionHistory);
+                            totalPayment += transactionHistory.getAmount();
+                        }
+                    }
+                    bills.remove(userId);
+                    generateBill(userId);
+                    bills.get(userId).setBalance(bills.get(userId).getBalance() - totalPayment);
+                    for (Transaction payment : paymentHistory) {
+                        bills.get(userId).getTransactions().add(payment);
+                    }
+                }
             } else {
-                throw new IllegalPermissionException("You dont have permission to edit other's record.");
+                throw new PermissionDeniedException("You don't have permission to change the user id.");
             }
         }
 
@@ -235,7 +249,11 @@ public class BILL implements BILLIntf {
      * @throws Exception  if the bill could not be generated.
      * SEE NOTE IN CLASS HEADER.
      */
-    public Bill generateBill(String userId) throws Exception {
+    public Bill generateBill(String userId)
+            throws NoLoggedInUserException, PermissionDeniedException, InvalidUserException {
+        validateLoggedInUser();
+        validatePermission(userId);
+
         if (bills.containsKey(userId)) {
             return bills.get(userId);
         } else {
@@ -261,10 +279,14 @@ public class BILL implements BILLIntf {
     public Bill viewCharges(String userId, int startMonth, int startDay, int startYear,
                             int endMonth, int endDay, int endYear)
             throws Exception {
+        validateLoggedInUser();
+        validatePermission(userId);
+
         final Date startDate = new Date(startMonth, startDay, startYear);
         final Date endDate = new Date(endMonth, endDay, endYear);
+
         if (!Date.isBefore(startDate, endDate)) {
-            throw new Exception();
+            throw new WrongDateException();
         } else {
             if (!bills.containsKey(userId)) {
                 generateBill(userId);
@@ -285,6 +307,9 @@ public class BILL implements BILLIntf {
      */
     public void applyPayment(String userId, BigDecimal amount, String note)
             throws Exception {
+        validateLoggedInUser();
+        validatePermission(userId);
+
         if (!bills.containsKey(userId)) {
             generateBill(userId);
         }
@@ -296,9 +321,13 @@ public class BILL implements BILLIntf {
      * Saves the student records permanently to a file.
      * @throws InvalidRecordException if the transcript data could not be saved.
      */
-    private void saveStudentRecords() throws InvalidRecordException {
+    private void saveStudentRecords() throws InvalidRecordException, IOException {
         String representation = new GsonBuilder().setPrettyPrinting().create().toJson(studentRecords);
-        //TODO - output the string to a file
+
+//        FileWriter fileWriter = new FileWriter(new File(classLoader.getResource("file/students.txt").getFile()));
+//        fileWriter.write(representation);
+//        fileWriter.flush();
+//        fileWriter.close();
     }
 
     /**
@@ -306,9 +335,37 @@ public class BILL implements BILLIntf {
      * @param userId A string that represents the user id to be checked.
      * @throws InvalidUserException if given userId is null.
      */
-    private void validateUser(String userId) throws InvalidUserException {
-        if (userId == null || !userInfos.containsKey(userId)) {
-            throw new InvalidUserException("Not a valid user.");
+    private void validateUser(String userId, Set<String> idSet) throws InvalidUserException {
+        if (userId == null || !idSet.contains(userId)) {
+            throw new InvalidUserException("Invalid user id");
+        }
+    }
+
+    private void validateLoggedInUser() throws NoLoggedInUserException {
+        try {
+            validateUser(currentUser, userInfos.keySet());
+        } catch (InvalidUserException ex) {
+            throw new NoLoggedInUserException();
+        }
+    }
+
+    /**
+     * Checks the permission
+     * @param userId
+     */
+    private void validatePermission(String userId)
+            throws InvalidUserException, PermissionDeniedException, NoLoggedInUserException {
+        validateUser(userId, userInfos.keySet());
+
+        if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
+            if (!currentUser.equals(userId)) {
+                throw new PermissionDeniedException();
+            }
+        } else {
+            List<String> userGroup = getStudentIDs();
+            if(!userGroup.contains(userId)) {
+                throw new PermissionDeniedException();
+            }
         }
     }
 
@@ -318,15 +375,30 @@ public class BILL implements BILLIntf {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
+        String id = "jsmith";
 
-        BILLIntf billIntf = new BILL();
+        BILLIntf billTester = new BILL();
+        billTester.logIn(id);
+        billTester.logOut();
 
-        String id = "mhunt";
-        billIntf.logIn(id);
-        System.out.println(billIntf.generateBill(id));
+        billTester.logIn(id);
+        billTester.applyPayment("mhunt", new BigDecimal(12000), "Make a 1000 payment");
+        System.out.println(billTester.generateBill("mhunt"));
 
-        billIntf.applyPayment(id, new BigDecimal(321.32451), "Make a 1000 payment");
-        Bill bill = billIntf.viewCharges(id, 1, 1, 2017, 12,31,2017);
+        StudentRecord newRecord = billTester.getRecord("mhunt");
+        newRecord.getStudent().setFirstName("Zheng");
+        newRecord.setResident(true);
+        newRecord.setActiveDuty(true);
+        newRecord.setStudyAboard(StudyAbroad.COHORT);
+
+        billTester.editRecord("mhunt", newRecord, true);
+
+//        billTester.applyPayment("mhunt", new BigDecimal(321.32451), "Make a 1000 payment");
+
+        System.out.println(billTester.generateBill("mhunt"));
+
+        //        billTester.applyPayment(id, new BigDecimal(-1), "Make a 1000 payment");
+        Bill bill = billTester.viewCharges("mhunt", 1, 1, 2017, 12,31,2017);
         System.out.println(bill);
         System.out.print("Done");
 

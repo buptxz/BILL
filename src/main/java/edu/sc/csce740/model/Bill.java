@@ -3,6 +3,7 @@ package edu.sc.csce740.model;
 import edu.sc.csce740.config.FeeConstant;
 import edu.sc.csce740.enums.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Calendar;
 
 @Getter
+@Setter
 @ToString
 public class Bill {
     private Student student;
@@ -117,7 +119,7 @@ public class Bill {
                 } else {
                     // Non-resident
                     addCharge(FeeConstant.GRADUATE_NONRESIDENT_TUITION_FULL_TIME
-                            , "UNDERGRADUATE - RESIDENT - TUITION");
+                            , "GRADUATE - NONRESIDENT - TUITION");
                     addCharge(FeeConstant.GRADUATE_NONRESIDENT_17_HOURS_AND_ABOVE * (totalCredit - 16)
                             , "GRADUATE - NONRESIDENT - 17 HOURS AND ABOVE");
                 }
@@ -132,7 +134,7 @@ public class Bill {
                 } else {
                     // Non-resident
                     addCharge(FeeConstant.GRADUATE_NONRESIDENT_TUITION_PART_TIME * totalCredit
-                            , "UNDERGRADUATE - RESIDENT - TUITION");
+                            , "GRADUATE - NONRESIDENT - TUITION");
                 }
             }
         }  else if (classStatus == ClassStatus.FRESHMAN || classStatus == ClassStatus.SOPHOMORE ||
@@ -346,6 +348,10 @@ public class Bill {
      * @throws Exception
      */
     public void makePayment(BigDecimal amount, String note) throws Exception {
+        if (amount.compareTo(new BigDecimal(0)) <= 0) {
+            throw new Exception();
+        }
+
         BigDecimal balanceBD = new BigDecimal(this.balance);
         if (amount.compareTo(balanceBD) == 1) {
             throw new Exception();
