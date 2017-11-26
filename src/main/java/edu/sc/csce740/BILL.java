@@ -15,7 +15,9 @@ import edu.sc.csce740.enums.*;
 import edu.sc.csce740.exception.*;
 import edu.sc.csce740.model.*;
 
-
+/**
+ * An implementation of BILLIntf.
+ */
 public class BILL implements BILLIntf {
     /**
      * Currently active user id.
@@ -40,12 +42,10 @@ public class BILL implements BILLIntf {
      */
     private Map<String, Bill> bills;
 
-//    private Set<String>
-
     /**
      * A class loader to read files.
      */
-    private ClassLoader classLoader = getClass().getClassLoader();
+    private final ClassLoader classLoader = getClass().getClassLoader();
 
     /**
      * Constructor
@@ -101,14 +101,15 @@ public class BILL implements BILLIntf {
                 studentRecords.put(studentRecord.getStudent().getId(), studentRecord);
             }
         } catch (NullPointerException ex) {
-            throw new FileNotFoundException("Encounters errors when loading student records to the systen: " + ex.getMessage());
+            throw new FileNotFoundException(
+                    "Encounters errors when loading student records to the systen: " + ex.getMessage());
         }
     }
 
     /**
      * Sets the user id of the user currently using the system.
      * @param userId  the id of the user to log in.
-     * @throws InvalidUserException Encounters if the user id is invalid.
+     * @throws InvalidUserException if the user id is invalid.
      */
     public void logIn(String userId) throws InvalidUserException {
         validateUser(userId, userInfos.keySet());
@@ -136,36 +137,39 @@ public class BILL implements BILLIntf {
      * Gets a list of the userIds of the students that an admin can view.
      * @return a list containing the userId of for each student in the
      *      college belonging to the current user
-     * @throws InvalidUserException if the user id is invalid.
-     * @throws PermissionDeniedException if the current user is not an admin.
+     * @throws StudentIdNotFoundException if errors happen when getting student id list.
      */
-    public List<String> getStudentIDs() throws NoLoggedInUserException, PermissionDeniedException {
-        validateLoggedInUser();
+    public List<String> getStudentIDs() throws StudentIdNotFoundException {
+        try {
+            validateLoggedInUser();
 
-        if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
-            throw new PermissionDeniedException("You don't have permission to get student IDs.");
-        } else {
-            // Admin
-            List<String> studentIdList = new ArrayList<String>();
-            final College currentAdminCollege = userInfos.get(currentUser).getCollege();
+            if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
+                throw new PermissionDeniedException("You don't have permission to get student IDs.");
+            } else {
+                List<String> studentIdList = new ArrayList<String>();
+                final College currentAdminCollege = userInfos.get(currentUser).getCollege();
 
             /*
                If this is a ADMIN and from Graduate School, he can view all graduate students' records.
                If this is an ADMIN but not from Graduate School, he can only view students' records from
                his college.
             */
-            for (String studentUserId: studentRecords.keySet()) {
-                StudentRecord studentRecord = studentRecords.get(studentUserId);
-                ClassStatus studentClassStatus = studentRecord.getClassStatus();
+                for (String studentUserId : studentRecords.keySet()) {
+                    StudentRecord studentRecord = studentRecords.get(studentUserId);
+                    ClassStatus studentClassStatus = studentRecord.getClassStatus();
 
-                if ((currentAdminCollege == College.GRADUATE_SCHOOL
-                        && (studentClassStatus == ClassStatus.MASTERS || studentClassStatus == ClassStatus.PHD))
-                        || (currentAdminCollege == studentRecord.getCollege())) {
-                    studentIdList.add(studentUserId);
+                    if ((currentAdminCollege == College.GRADUATE_SCHOOL
+                            && (studentClassStatus == ClassStatus.MASTERS || studentClassStatus == ClassStatus.PHD))
+                            || (currentAdminCollege == studentRecord.getCollege())) {
+                        studentIdList.add(studentUserId);
+                    }
                 }
-            }
 
-            return studentIdList;
+                return studentIdList;
+            }
+        } catch (Exception ex) {
+            throw new StudentIdNotFoundException("Either no student id is found or encounters errors when " +
+                    "getting student ids: " + ex);
         }
     }
 
@@ -173,15 +177,16 @@ public class BILL implements BILLIntf {
      * Gets the raw student record data for a given userId.
      * @param userId  the identifier of the student.
      * @return the student record data.
-     * @throws InvalidUserException if the user id is invalid.
-     * @throws PermissionDeniedException if the current user does not have permission
-     *              to view the record of given user id.
+     * @throws NoFoundRecordException if either failed in validating user or failed in validating record.
      */
-    public StudentRecord getRecord(String userId)
-            throws NoLoggedInUserException, PermissionDeniedException, InvalidUserException  {
-        validateLoggedInUser();
-        validatePermission(userId);
-        validateUser(userId, studentRecords.keySet());
+    public StudentRecord getRecord(String userId) throws NoFoundRecordException {
+        try {
+            validateLoggedInUser();
+            validatePermission(userId);
+            validateUser(userId, studentRecords.keySet());
+        } catch (Exception ex) {
+            throw new NoFoundRecordException("Errors happen when getting student records: " + ex);
+        }
         return studentRecords.get(userId);
     }
 
@@ -191,54 +196,35 @@ public class BILL implements BILLIntf {
      * @param record  the new student record
      * @param permanent  a status flag indicating whether (if false) to make a
      * temporary edit to the in-memory structure or (if true) a permanent edit.
-     * @throws InvalidUserException if the user id is invalid.
-     * @throws PermissionDeniedException if the current user does not have permission
-     *              to view the record of given user id.
-     * @throws InvalidRecordException if the transcript data could not be saved.
+     * @throws IllegalRecordEditException if errors happen in editing a record.
      */
     public void editRecord(String userId, StudentRecord record, Boolean permanent)
-            throws NoLoggedInUserException, PermissionDeniedException,
-            InvalidUserException, InvalidRecordException, IOException {
-        if (record == null) {
-            return;
-        }
-
-        validateLoggedInUser();
-        validatePermission(userId);
-        validateUser(userId, studentRecords.keySet());
-
-        final Role role = userInfos.get(currentUser).getRole();
-        if (role == Role.STUDENT) {
-            studentRecords.get(userId).setStudent(record.getStudent());
-        } else {
-            StudentRecord oldRecord = getRecord(userId);
-            if (oldRecord != null && record.getStudent().getId().equals(userId)) {
-                studentRecords.put(userId, record);
-
-                // TODO Re-generate bill
-                if (bills.containsKey(userId)) {
-                    double totalPayment = 0;
-                    List<Transaction> paymentHistory = new ArrayList<Transaction>();
-                    for (Transaction transactionHistory : bills.get(userId).getTransactions()) {
-                        if (transactionHistory.getType() == Type.PAYMENT) {
-                            paymentHistory.add(transactionHistory);
-                            totalPayment += transactionHistory.getAmount();
-                        }
-                    }
-                    bills.remove(userId);
-                    generateBill(userId);
-                    bills.get(userId).setBalance(bills.get(userId).getBalance() - totalPayment);
-                    for (Transaction payment : paymentHistory) {
-                        bills.get(userId).getTransactions().add(payment);
-                    }
-                }
-            } else {
-                throw new PermissionDeniedException("You don't have permission to change the user id.");
+            throws IllegalRecordEditException {
+        try {
+            if (record == null) {
+                throw new IllegalRecordEditException("Cannot process empty record.");
             }
-        }
 
-        if (permanent) {
-            saveStudentRecords();
+            validateLoggedInUser();
+            validatePermission(userId);
+            validateUser(userId, studentRecords.keySet());
+
+            final Role role = userInfos.get(currentUser).getRole();
+            if (role == Role.STUDENT) {
+                studentRecords.get(userId).setStudent(record.getStudent());
+            } else {
+                final StudentRecord oldRecord = getRecord(userId);
+                if (oldRecord != null && record.getStudent().getId().equals(userId)) {
+                    studentRecords.put(userId, record);
+                    regenerateBill(userId);
+                }
+            }
+
+            if (permanent) {
+                saveStudentRecords();
+            }
+        } catch (Exception ex) {
+            throw new IllegalRecordEditException("Errors happen when editing student record: " + ex);
         }
     }
 
@@ -246,20 +232,22 @@ public class BILL implements BILLIntf {
      * Generates current bill.
      * @param userId the student to generate the bill for.
      * @returns the student's bill in a data class matching the I/O file.
-     * @throws Exception  if the bill could not be generated.
-     * SEE NOTE IN CLASS HEADER.
+     * @throws BillGenerationException if the bill could not be generated.
      */
-    public Bill generateBill(String userId)
-            throws NoLoggedInUserException, PermissionDeniedException, InvalidUserException {
-        validateLoggedInUser();
-        validatePermission(userId);
+    public Bill generateBill(String userId) throws BillGenerationException {
+        try {
+            validateLoggedInUser();
+            validatePermission(userId);
 
-        if (bills.containsKey(userId)) {
-            return bills.get(userId);
-        } else {
-            final Bill currentBill = new Bill(studentRecords.get(userId), null, null, null);
-            bills.put(userId, currentBill);
-            return currentBill;
+            if (bills.containsKey(userId)) {
+                return bills.get(userId);
+            } else {
+                final Bill currentBill = new Bill(studentRecords.get(userId), null, null, null);
+                bills.put(userId, currentBill);
+                return currentBill;
+            }
+        } catch (Exception ex) {
+            throw new BillGenerationException("Errors happen when generating a bill: " + ex);
         }
     }
 
@@ -273,27 +261,28 @@ public class BILL implements BILLIntf {
      * @param endDay the day of the end date.
      * @param endYear the year of the end date.
      * @returns the student's bill in a data class matching the I/O file.
-     * @throws Exception  if the bill could not be generated.
-     * SEE NOTE IN CLASS HEADER.
+     * @throws BillGenerationException if the bill could not be generated.
      */
     public Bill viewCharges(String userId, int startMonth, int startDay, int startYear,
-                            int endMonth, int endDay, int endYear)
-            throws Exception {
-        validateLoggedInUser();
-        validatePermission(userId);
+                            int endMonth, int endDay, int endYear) throws BillGenerationException {
+        try {
+            validateLoggedInUser();
+            validatePermission(userId);
 
-        final Date startDate = new Date(startMonth, startDay, startYear);
-        final Date endDate = new Date(endMonth, endDay, endYear);
+            final Date startDate = new Date(startMonth, startDay, startYear);
+            final Date endDate = new Date(endMonth, endDay, endYear);
 
-        if (!Date.isBefore(startDate, endDate)) {
-            throw new WrongDateException();
-        } else {
-            if (!bills.containsKey(userId)) {
-                generateBill(userId);
+            if (!Date.isBefore(startDate, endDate)) {
+                throw new WrongDateException();
+            } else {
+                if (!bills.containsKey(userId)) {
+                    generateBill(userId);
+                }
+                return new Bill(studentRecords.get(userId), bills.get(userId), startDate, endDate);
             }
-            return new Bill(studentRecords.get(userId), bills.get(userId), startDate, endDate);
+        } catch (Exception ex) {
+            throw new BillGenerationException("Errors happen when viewing charges: " + ex);
         }
-
     }
 
     /**
@@ -301,20 +290,22 @@ public class BILL implements BILLIntf {
      * @param userId  the student to make a payment for.
      * @param amount  amount to apply to the balance.
      * @param note  a string indicating the reason for the payment
-     * @throws Exception if the payment fails a validity check
-     * or fails to save to file.
-     * SEE NOTE IN CLASS HEADER.
+     * @throws PaymentSubmissionException if the payment fails a validity check or fails to save to file.
      */
-    public void applyPayment(String userId, BigDecimal amount, String note)
-            throws Exception {
-        validateLoggedInUser();
-        validatePermission(userId);
+    public void applyPayment(String userId, BigDecimal amount, String note) throws PaymentSubmissionException{
+        try {
+            validateLoggedInUser();
+            validatePermission(userId);
 
-        if (!bills.containsKey(userId)) {
-            generateBill(userId);
+            if (!bills.containsKey(userId)) {
+                generateBill(userId);
+            }
+
+            bills.get(userId).makePayment(amount, note);
+        } catch (Exception ex) {
+            throw new PaymentSubmissionException(
+                    "Payment fails a validity check or fails to save to file" + ex);
         }
-
-        bills.get(userId).makePayment(amount, note);
     }
 
     /**
@@ -341,6 +332,10 @@ public class BILL implements BILLIntf {
         }
     }
 
+    /**
+     * Checks whether there's a user logged in.
+     * @throws NoLoggedInUserException if the current user id is not in user info set.
+     */
     private void validateLoggedInUser() throws NoLoggedInUserException {
         try {
             validateUser(currentUser, userInfos.keySet());
@@ -350,11 +345,16 @@ public class BILL implements BILLIntf {
     }
 
     /**
-     * Checks the permission
-     * @param userId
+     * Checks the permission of the given user id.
+     * @param userId A string that represents the user id to be checked.
+     * @throws InvalidUserException if given userId is null.
+     * @throws PermissionDeniedException if current logged in user does not have permission
+     * to view given user's record.
+     * @throws NoLoggedInUserException if the current user id is not in user info set.
      */
     private void validatePermission(String userId)
-            throws InvalidUserException, PermissionDeniedException, NoLoggedInUserException {
+            throws InvalidUserException, PermissionDeniedException
+            , NoLoggedInUserException, StudentIdNotFoundException {
         validateUser(userId, userInfos.keySet());
 
         if (userInfos.get(currentUser).getRole() == Role.STUDENT) {
@@ -365,6 +365,33 @@ public class BILL implements BILLIntf {
             List<String> userGroup = getStudentIDs();
             if(!userGroup.contains(userId)) {
                 throw new PermissionDeniedException();
+            }
+        }
+    }
+
+    /**
+     * Regenerates bill.
+     * @param userId A string that represents the user of the bill to be regenerated.
+     * @throws BillGenerationException if the bill could not be generated.
+     */
+    private void regenerateBill(String userId) throws BillGenerationException {
+        if (bills.containsKey(userId)) {
+            double totalPayment = 0;
+            List<Transaction> paymentHistory = new ArrayList<Transaction>();
+
+            for (Transaction transactionHistory : bills.get(userId).getTransactions()) {
+                if (transactionHistory.getType() == Type.PAYMENT) {
+                    paymentHistory.add(transactionHistory);
+                    totalPayment += transactionHistory.getAmount();
+                }
+            }
+
+            bills.remove(userId);
+            generateBill(userId);
+            bills.get(userId).setBalance(bills.get(userId).getBalance() - totalPayment);
+
+            for (Transaction payment : paymentHistory) {
+                bills.get(userId).getTransactions().add(payment);
             }
         }
     }

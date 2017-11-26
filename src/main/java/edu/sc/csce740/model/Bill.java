@@ -2,6 +2,7 @@ package edu.sc.csce740.model;
 
 import edu.sc.csce740.config.FeeConstant;
 import edu.sc.csce740.enums.*;
+import edu.sc.csce740.exception.InvalidPaymentException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -347,14 +348,14 @@ public class Bill {
      * @param note
      * @throws Exception
      */
-    public void makePayment(BigDecimal amount, String note) throws Exception {
+    public void makePayment(BigDecimal amount, String note) throws InvalidPaymentException {
         if (amount.compareTo(new BigDecimal(0)) <= 0) {
-            throw new Exception();
+            throw new InvalidPaymentException("Payment is less than 0.");
         }
 
         BigDecimal balanceBD = new BigDecimal(this.balance);
         if (amount.compareTo(balanceBD) == 1) {
-            throw new Exception();
+            throw new InvalidPaymentException("Payment is greater than balance.");
         } else {
             balanceBD = balanceBD.subtract(amount);
             this.balance = balanceBD.doubleValue();
