@@ -7,8 +7,8 @@ import edu.sc.csce740.exception.InvalidUserException;
 import edu.sc.csce740.exception.NoFoundRecordException;
 import edu.sc.csce740.exception.NoLoggedInUserException;
 import edu.sc.csce740.exception.NoFoundStudentIdException;
+import edu.sc.csce740.exception.DuplicateRecordException;
 import edu.sc.csce740.model.Bill;
-import edu.sc.csce740.model.Student;
 import edu.sc.csce740.model.StudentRecord;
 import edu.sc.csce740.model.UserInfo;
 import org.junit.After;
@@ -43,7 +43,7 @@ public class BILLTest {
         billImpl.bills = new HashMap<String, Bill>();
     }
 
-    @Test
+    @Test(expected = DuplicateRecordException.class)
     public void testLoadUsers() throws Exception {
         billImpl.loadUsers(TestConstant.USER_FILE);
     }
@@ -53,7 +53,7 @@ public class BILLTest {
         billImpl.loadUsers(TestConstant.INVALID_FILE_NAME);
     }
 
-    @Test
+    @Test(expected = DuplicateRecordException.class)
     public void testLoadRecords() throws Exception {
         billImpl.loadRecords(TestConstant.RECORD_FILE);
     }

@@ -72,9 +72,9 @@ public class BILL implements BILLIntf {
                             new TypeToken<List<UserInfo>>() {
                             }.getType());
             for (UserInfo userInfo : userInfosList) {
-//                if (userInfos.containsKey(userInfo.getId())) {
-//                    throw new DuplicateRecordException();
-//                }
+                if (userInfos.containsKey(userInfo.getId())) {
+                    throw new DuplicateRecordException();
+                }
                 userInfos.put(userInfo.getId(), userInfo);
             }
         } catch (NullPointerException ex) {
@@ -95,9 +95,9 @@ public class BILL implements BILLIntf {
                             }.getType());
 
             for (StudentRecord studentRecord : studentRecordsList) {
-//                if (studentRecords.containsKey(studentRecord.getStudent().getId())) {
-//                    throw new DuplicateRecordException();
-//                }
+                if (studentRecords.containsKey(studentRecord.getStudent().getId())) {
+                    throw new DuplicateRecordException();
+                }
                 studentRecords.put(studentRecord.getStudent().getId(), studentRecord);
             }
         } catch (NullPointerException ex) {
