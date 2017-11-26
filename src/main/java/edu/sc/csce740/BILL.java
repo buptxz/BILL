@@ -18,8 +18,6 @@ import edu.sc.csce740.enums.Role;
 import edu.sc.csce740.exception.IllegalPermissionException;
 import edu.sc.csce740.exception.InvalidUserException;
 import edu.sc.csce740.exception.InvalidRecordException;
-import edu.sc.csce740.exception.LoadRecordException;
-import edu.sc.csce740.exception.LoadUserException;
 import edu.sc.csce740.model.*;
 
 
@@ -62,9 +60,9 @@ public class BILL implements BILLIntf {
     /**
      * Loads the list of system usernames and userInfos.
      * @param usersFile the filename of the users file.
-     * @throws LoadUserException when loading users to the system.
+     * @throws InvalidUserException when loading users to the system.
      */
-    public void loadUsers(String usersFile) throws LoadUserException {
+    public void loadUsers(String usersFile) throws InvalidUserException {
         try {
             final List<UserInfo> userInfosList =
                     new Gson().fromJson(new FileReader(new File(classLoader.getResource(usersFile).getFile())),
@@ -74,16 +72,16 @@ public class BILL implements BILLIntf {
                 userInfos.put(permission.getId(), permission);
             }
         } catch (FileNotFoundException ex) {
-            throw new LoadUserException("Encounters errors when loading users to the systen: " + ex.getMessage());
+            throw new InvalidUserException("Encounters errors when loading users to the systen: " + ex.getMessage());
         }
     }
 
     /**
      * Loads the list of system transcripts.
      * @param recordsFile the filename of the transcripts file.
-     * @throws LoadRecordException if errors happen when loading user records to the system.
+     * @throws InvalidRecordException if errors happen when loading user records to the system.
      */
-    public void loadRecords(String recordsFile) throws LoadRecordException {
+    public void loadRecords(String recordsFile) throws InvalidRecordException {
         try {
             final List<StudentRecord> studentRecordsList =
                     new Gson().fromJson(new FileReader(new File(classLoader.getResource(recordsFile).getFile())),
@@ -94,7 +92,7 @@ public class BILL implements BILLIntf {
                 studentRecords.put(studentRecord.getStudent().getId(), studentRecord);
             }
         } catch (FileNotFoundException ex) {
-            throw new LoadRecordException("Encounters errors when loading student records to the systen: " + ex.getMessage());
+            throw new InvalidRecordException("Encounters errors when loading student records to the systen: " + ex.getMessage());
         }
     }
 
@@ -104,11 +102,8 @@ public class BILL implements BILLIntf {
      * @throws InvalidUserException Encounters if the user id is invalid.
      */
     public void logIn(String userId) throws InvalidUserException {
-        if (!userInfos.containsKey(userId)) {
-            throw new InvalidUserException("Not a valid user.");
-        } else {
-            this.currentUser = userId;
-        }
+        validateUser(userId);
+        this.currentUser = userId;
     }
 
     /**
@@ -310,7 +305,7 @@ public class BILL implements BILLIntf {
      * @throws InvalidUserException if given userId is null.
      */
     private void validateUser(String userId) throws InvalidUserException {
-        if (userId == null) {
+        if (userId == null || !userInfos.containsKey(userId)) {
             throw new InvalidUserException("Not a valid user.");
         }
     }
