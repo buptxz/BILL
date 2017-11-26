@@ -50,7 +50,7 @@ public class BILL implements BILLIntf {
      */
     private ClassLoader classLoader = getClass().getClassLoader();
 
-    public BILL() throws LoadUserException, LoadRecordException {
+    public BILL() throws InvalidUserException, InvalidRecordException {
         currentUser = null;
         userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
