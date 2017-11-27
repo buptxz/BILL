@@ -1,7 +1,6 @@
 package edu.sc.csce740.model;
 
 import edu.sc.csce740.exception.InvalidDateException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
@@ -21,9 +20,9 @@ public class Date {
     }
 
     /**
-     *
-     * @param otherDate
-     * @return
+     * Check if the current date is before the provided date
+     * @param otherDate the other date
+     * @return if the current date is before the provided date
      */
     public boolean isBefore(Date otherDate) {
         if (this.year < otherDate.getYear()) {
@@ -36,20 +35,16 @@ public class Date {
             } else if (this.month > otherDate.getMonth()) {
                 return false;
             } else {
-                if (this.day <= otherDate.getDay()) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return this.day <= otherDate.getDay();
             }
         }
     }
 
     /**
-     *
-     * @param date1
-     * @param date2
-     * @return
+     * Check if the date1 is before the date2
+     * @param date1 the first date
+     * @param date2 the second date
+     * @return if the date1 is before the date2
      */
     public boolean isBetween(Date date1, Date date2) {
         Date currentDate = new Date(this.month, this.day, this.year);
@@ -57,45 +52,41 @@ public class Date {
     }
 
     /**
-     *
-     * @param date1
-     * @param date2
-     * @return
+     * Check if the current date is between the start and the end date
+     * @param startDate start date
+     * @param endDate end date
+     * @return if the current date is between the start and the end date
      */
-    public static boolean isBefore(Date date1, Date date2) {
-        if (date1.getYear() < date2.getYear()) {
+    public static boolean isBefore(Date startDate, Date endDate) {
+        if (startDate.getYear() < endDate.getYear()) {
             return true;
-        } else if (date1.getYear() > date2.getYear()) {
+        } else if (startDate.getYear() > endDate.getYear()) {
             return false;
         } else {
-            if (date1.getMonth() < date2.getMonth()) {
+            if (startDate.getMonth() < endDate.getMonth()) {
                 return true;
-            } else if (date1.getMonth() > date2.getMonth()) {
+            } else if (startDate.getMonth() > endDate.getMonth()) {
                 return false;
             } else {
-                if (date1.getDay() <= date2.getDay()) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return startDate.getDay() <= endDate.getDay();
             }
         }
     }
 
     /**
-     *
-     * @param date1 input date
-     * @param date2 start date
-     * @param date3 end date
-     * @return
+     * Check the date1 is between the start date and the end date
+     * @param date input date
+     * @param startDate start date
+     * @param endDate end date
+     * @return if the date1 is between the start date and the end date
      */
-    public static boolean isBeween(Date date1, Date date2, Date date3) {
-        return isBefore(date2, date3) && isBefore(date2, date1) && isBefore(date1, date3);
+    public static boolean isBeween(Date date, Date startDate, Date endDate) {
+        return isBefore(startDate, endDate) && isBefore(startDate, date) && isBefore(date, endDate);
     }
 
     /**
-     *
-     * @return
+     * Print out the date
+     * @return the date
      */
     public String toString() {
         return month + "/" + day + "/" + year;

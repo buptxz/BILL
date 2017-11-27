@@ -62,7 +62,7 @@ public class Bill {
      * Calculate charge based on the student information.
      * @param studentRecord student record
      */
-    public void calculateCharge(StudentRecord studentRecord) {
+    private void calculateCharge(StudentRecord studentRecord) {
         // Calculate total credits, lab fee and online course fee
         int totalCredit = checkCourse(studentRecord);
 
@@ -353,7 +353,7 @@ public class Bill {
     /**
      * Add charge to the transaction history
      * @param amount the amount of the bill
-     * @param note
+     * @param note charge note
      */
     private void addCharge(double amount, String note) {
         if (amount <= 0) {
@@ -366,8 +366,8 @@ public class Bill {
     /**
      * Make a payment
      * @param amount the mount of the payment
-     * @param note
-     * @throws InvalidPaymentException
+     * @param note payment note
+     * @throws InvalidPaymentException when payment fails
      */
     public void makePayment(BigDecimal amount, String note) throws InvalidPaymentException {
         if (amount.compareTo(new BigDecimal(0)) <= 0) {
@@ -389,7 +389,7 @@ public class Bill {
      * Check if the input start semester is the current semester
      * @param startSemester start semester
      * @param startYear start year
-     * @return
+     * @return if it is the first semester
      */
     private boolean isFirstSemester(Semester startSemester, int startYear) {
         Calendar now = Calendar.getInstance();
@@ -406,11 +406,7 @@ public class Bill {
             currentSemester = Semester.SUMMER;
         }
 
-        if (startYear == now.get(Calendar.YEAR) && startSemester == currentSemester) {
-            return true;
-        } else {
-            return false;
-        }
+        return startYear == now.get(Calendar.YEAR) && startSemester == currentSemester;
     }
 
     /**
@@ -418,12 +414,12 @@ public class Bill {
      * @return The current bill
      */
     public String toString() {
-        String output = "";
-        output += "ID: " + this.getStudent().getId() + "\n";
-        output += "Balance: " + this.getBalance() + "\n\n";
+        StringBuilder output = new StringBuilder();
+        output.append("ID: ").append(this.getStudent().getId()).append("\n");
+        output.append("Balance: ").append(this.getBalance()).append("\n\n");
         for (Transaction transaction : transactions) {
-            output += transaction.toString() + "\n";
+            output.append(transaction.toString()).append("\n");
         }
-        return output;
+        return output.toString();
     }
 }

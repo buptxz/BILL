@@ -49,7 +49,7 @@ public class BILL implements BILLIntf {
 
     /**
      * Constructor
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException when file not found
      */
     public BILL() throws FileNotFoundException {
         currentUser = null;
@@ -235,7 +235,7 @@ public class BILL implements BILLIntf {
     /**
      * Generates current bill.
      * @param userId the student to generate the bill for.
-     * @returns the student's bill in a data class matching the I/O file.
+     * @return the student's bill in a data class matching the I/O file.
      * @throws BillGenerationException if the bill could not be generated.
      */
     public Bill generateBill(String userId) throws BillGenerationException {
@@ -265,7 +265,7 @@ public class BILL implements BILLIntf {
      * @param endMonth the month of the end date.
      * @param endDay the day of the end date.
      * @param endYear the year of the end date.
-     * @returns the student's bill in a data class matching the I/O file.
+     * @return the student's bill in a data class matching the I/O file.
      * @throws BillGenerationException if the bill could not be generated.
      */
     public Bill viewCharges(String userId, int startMonth, int startDay, int startYear,
