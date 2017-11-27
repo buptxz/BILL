@@ -2,8 +2,8 @@
   {
     "student": {
       "id": "mhunt",
-      "firstName": "Cizhen",
-      "lastName": "Wu",
+      "firstName": "Michelle",
+      "lastName": "Hunt",
       "phone": "999-999-9999",
       "emailAddress": "mhunt@mailbox.sc.edu",
       "addressStreet": "221B Baker St.",
@@ -96,6 +96,67 @@
           },
           "amount": 2000.00,
           "note": "Final total Spring 2016"
+        }
+    ]
+  },
+  {
+    "student": {
+      "id": "ggay",
+      "firstName": "Gregory",
+      "lastName": "Gay",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "termBegan": {
+      "semester": "FALL",
+      "year": 2017
+    },
+    "classStatus": "FRESHMAN",
+    "gradAssistant": false,
+    "international": false,
+    "internationalStatus": "NONE",
+    "resident": false,
+    "activeDuty": false,
+    "veteran": false,
+    "freeTuition": false,
+    "scholarship": "WOODROW",
+    "studyAbroad": "NONE",
+    "nationalStudentExchange": false,
+    "outsideInsurance": true,
+    "courses": [
+        {
+            "name": "Intro to Computer Science",
+            "id": "CSCE 101",
+            "numCredits": 3,
+            "online": false
+        },
+        {
+            "name": "Underwater Basket Weaving",
+            "id": "STUFF 150",
+            "numCredits": 3,
+            "online": false
+        },
+        {
+            "name": "Algorithmic Design I",
+            "id": "CSCE 145",
+            "numCredits": 4,
+            "online": false
+        },
+        {
+            "name": "Statistics",
+            "id": "STAT 215",
+            "numCredits": 4,
+            "online": false
+        },
+        {
+            "name": "Why Did I Take This? A Course on Regret",
+            "id": "PSYCHOLOGY 190",
+            "numCredits": 3
         }
     ]
   }

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import edu.sc.csce740.enums.*;
 import edu.sc.csce740.exception.*;
 import edu.sc.csce740.model.*;
@@ -56,8 +56,8 @@ public class BILL implements BILLIntf {
         userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
         bills = new HashMap<String, Bill>();
-        loadUsers("users.txt");
-        loadRecords("students.txt");
+        loadUsers("file/users.txt");
+        loadRecords("file/students.txt");
     }
 
     /**
@@ -69,8 +69,7 @@ public class BILL implements BILLIntf {
         try {
             final List<UserInfo> userInfosList =
                     new Gson().fromJson(new FileReader(new File(classLoader.getResource(usersFile).getFile())),
-                            new TypeToken<List<UserInfo>>() {
-                            }.getType());
+                            new TypeToken<List<UserInfo>>(){}.getType());
             for (UserInfo userInfo : userInfosList) {
                 if (userInfos.containsKey(userInfo.getId())) {
                     throw new DuplicateRecordException();
@@ -91,8 +90,7 @@ public class BILL implements BILLIntf {
         try {
             final List<StudentRecord> studentRecordsList =
                     new Gson().fromJson(new FileReader(new File(classLoader.getResource(recordsFile).getFile())),
-                            new TypeToken<List<StudentRecord>>() {
-                            }.getType());
+                            new TypeToken<List<StudentRecord>>(){}.getType());
 
             for (StudentRecord studentRecord : studentRecordsList) {
                 if (studentRecords.containsKey(studentRecord.getStudent().getId())) {
@@ -319,10 +317,10 @@ public class BILL implements BILLIntf {
      */
     private void saveStudentRecords() throws InvalidRecordException, IOException {
         String representation = new GsonBuilder().setPrettyPrinting().create().toJson(studentRecords);
-//        FileWriter fileWriter = new FileWriter(new File(classLoader.getResource("file/students.txt").getFile()));
-//        fileWriter.write(representation);
-//        fileWriter.flush();
-//        fileWriter.close();
+
+//        FileWriter out = new FileWriter(classLoader.getResource("students.txt").getFile());
+//        out.write(representation);
+//        out.close();
     }
 
     /**

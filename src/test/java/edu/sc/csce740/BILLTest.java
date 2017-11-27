@@ -173,7 +173,7 @@ public class BILLTest {
     @Test
     public void testGenerateBillNotExistBill() throws Exception {
         billImpl.logIn(TestConstant.GRADUATE_SCHOOL_USER_ID);
-        StudentRecord record = parseStudentRecordFromFile("students.txt");
+        StudentRecord record = parseStudentRecordFromFile("file/students.txt");
         Bill expectedBill = new Bill(record, null, null, null);
         Bill actualBill = billImpl.generateBill(TestConstant.STUDENT_ID);
 
