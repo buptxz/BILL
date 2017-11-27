@@ -32,9 +32,13 @@ public class Bill {
         this.transactions = new ArrayList<Transaction>();
 
         if (startDate == null) {
+            // Generate a new bill
             calculateCharge(studentRecord);
         } else {
+            // View transaction history
             this.balance = currentBill.getBalance();
+
+            // Check transactions from student record
             if (studentRecord.getTransactions() != null) {
                 for (Transaction transaction : studentRecord.getTransactions()) {
                     if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
@@ -42,6 +46,8 @@ public class Bill {
                     }
                 }
             }
+
+            // Check transactions from current bill
             if (currentBill.getTransactions() != null) {
                 for (Transaction transaction : currentBill.getTransactions()) {
                     if (transaction.getTransactionDate().isBetween(startDate, endDate)) {
@@ -53,8 +59,8 @@ public class Bill {
     }
 
     /**
-     * Calculate charge based on the student information
-     * @param studentRecord
+     * Calculate charge based on the student information.
+     * @param studentRecord student record
      */
     public void calculateCharge(StudentRecord studentRecord) {
         // Calculate total credits, lab fee and online course fee
@@ -68,9 +74,9 @@ public class Bill {
     }
 
     /**
-     *
-     * @param studentRecord
-     * @return
+     * Check the course the student takes. Look for possible lab fees. Calculate total credits of the courses.
+     * @param studentRecord student record
+     * @return Number of total credits
      */
     private int checkCourse(StudentRecord studentRecord) {
         // Calculate total credits, lab fee and online course fee
@@ -104,9 +110,9 @@ public class Bill {
     }
 
     /**
-     *
-     * @param studentRecord
-     * @param totalCredit
+     * Calculate tuition.
+     * @param studentRecord student record
+     * @param totalCredit total credits
      */
     private void calculateTuition(StudentRecord studentRecord, int totalCredit) {
         if (studentRecord.getFreeTuition()) {
@@ -165,10 +171,7 @@ public class Bill {
                                 "UNDERGRADUATE - RESIDENT - TUITION");
                     } else {
                         // Non-resident
-                        if (studentRecord.getScholarship() == Scholarship.NONE) {
-                            addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_TUITION_FULL_TIME,
-                                    "UNDERGRADUATE - NONRESIDENT - TUITION");
-                        } else if (studentRecord.getScholarship() == Scholarship.WOODROW ||
+                        if (studentRecord.getScholarship() == Scholarship.WOODROW ||
                                 studentRecord.getScholarship() == Scholarship.DEPARTMENTAL) {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_WOODROW_TUITION_FULL_TIME,
                                     "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - WOODROW & DEPARTMENTAL");
@@ -181,6 +184,9 @@ public class Bill {
                         } else if (studentRecord.getScholarship() == Scholarship.SIMS) {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_SIMS_TUITION_FULL_TIME,
                                     "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP -SIMS");
+                        } else {
+                            addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_TUITION_FULL_TIME,
+                                    "UNDERGRADUATE - NONRESIDENT - TUITION");
                         }
                     }
                 }
@@ -211,10 +217,7 @@ public class Bill {
                                 "UNDERGRADUATE - NONRESIDENT - TUITION");
                     } else {
                         // Non resident
-                        if (studentRecord.getScholarship() == Scholarship.NONE) {
-                            addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_TUITION_PART_TIME * totalCredit,
-                                    "UNDERGRADUATE - NONRESIDENT - TUITION");
-                        } else if (studentRecord.getScholarship() == Scholarship.WOODROW ||
+                        if (studentRecord.getScholarship() == Scholarship.WOODROW ||
                                 studentRecord.getScholarship() == Scholarship.DEPARTMENTAL) {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_WOODROW_TUITION_PART_TIME * totalCredit,
                                     "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - WOODROW & DEPARTMENTAL");
@@ -227,6 +230,9 @@ public class Bill {
                         } else if (studentRecord.getScholarship() == Scholarship.SIMS) {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_SIMS_TUITION_PART_TIME * totalCredit,
                                     "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP -SIMS");
+                        } else {
+                            addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_TUITION_PART_TIME * totalCredit,
+                                    "UNDERGRADUATE - NONRESIDENT - TUITION");
                         }
                     }
                 }
@@ -236,9 +242,9 @@ public class Bill {
     }
 
     /**
-     *
-     * @param studentRecord
-     * @param totalCredit
+     * Calculate other fees.
+     * @param studentRecord student record
+     * @param totalCredit total credits
      */
     private void calculateOtherFee(StudentRecord studentRecord, int totalCredit) {
         boolean isFullTime = (totalCredit >= 12);
@@ -320,19 +326,19 @@ public class Bill {
             }
         }
 
-        // National
+        // National student exchange
         if (studentRecord.getNationalStudentExchange()) {
             addCharge(FeeConstant.NATIONAL_STUDENT_EXCHANGE_PLACEMENT_ADMINISTRATIVE_FEE,
                     "NATIONAL STUDENT EXCHANGE PLACEMENT & ADMINISTRATIVE FEE");
         }
 
-        // MATRICULATION_FEE
+        // Matriculation fee
         if (isFirstSemester(studentRecord.getTermBegan().getSemester(), studentRecord.getTermBegan().getYear())) {
             addCharge(FeeConstant.MATRICULATION_FEE,
                     "MATRICULATION FEE");
         }
 
-        // Engineering
+        // Engineering and computing program fee
         if (studentRecord.getCollege() == College.ENGINEERING_AND_COMPUTING) {
             if (isFullTime) {
                 addCharge(FeeConstant.ENGINEERING_AND_COMPUTING_PROGRAM_FEE_FULL_TIME,
@@ -346,7 +352,7 @@ public class Bill {
 
     /**
      * Add charge to the transaction history
-     * @param amount
+     * @param amount the amount of the bill
      * @param note
      */
     private void addCharge(double amount, String note) {
@@ -359,7 +365,7 @@ public class Bill {
 
     /**
      * Make a payment
-     * @param amount
+     * @param amount the mount of the payment
      * @param note
      * @throws InvalidPaymentException
      */
@@ -380,9 +386,9 @@ public class Bill {
     }
 
     /**
-     *
-     * @param startSemester
-     * @param startYear
+     * Check if the input start semester is the current semester
+     * @param startSemester start semester
+     * @param startYear start year
      * @return
      */
     private boolean isFirstSemester(Semester startSemester, int startYear) {
@@ -408,8 +414,8 @@ public class Bill {
     }
 
     /**
-     *
-     * @return
+     * Print out the bill
+     * @return The current bill
      */
     public String toString() {
         String output = "";

@@ -5,12 +5,11 @@ import com.google.gson.reflect.TypeToken;
 import edu.sc.csce740.exception.BillGenerationException;
 import edu.sc.csce740.exception.IllegalRecordEditException;
 import edu.sc.csce740.exception.InvalidUserException;
-import edu.sc.csce740.exception.NoFoundRecordException;
+import edu.sc.csce740.exception.NonExistentRecordException;
 import edu.sc.csce740.exception.NoLoggedInUserException;
-import edu.sc.csce740.exception.NoFoundStudentIdException;
+import edu.sc.csce740.exception.NonExistentStudentIdException;
 import edu.sc.csce740.exception.DuplicateRecordException;
 import edu.sc.csce740.model.Bill;
-import edu.sc.csce740.model.Date;
 import edu.sc.csce740.model.StudentRecord;
 import edu.sc.csce740.model.UserInfo;
 import org.junit.After;
@@ -113,7 +112,7 @@ public class BILLTest {
         assertEquals(expectedStudentIDList, studentIDList);
     }
 
-    @Test(expected = NoFoundStudentIdException.class)
+    @Test(expected = NonExistentStudentIdException.class)
     public void testGetStudentIDsWithException() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
         billImpl.getStudentIDs();
@@ -126,7 +125,7 @@ public class BILLTest {
         assertEquals(billImpl.studentRecords.get(TestConstant.STUDENT_ID), studentRecord);
     }
 
-    @Test(expected = NoFoundRecordException.class)
+    @Test(expected = NonExistentRecordException.class)
     public void testGetRecordWithException() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
         StudentRecord studentRecord = billImpl.getRecord(TestConstant.INVALID_USER_ID);
@@ -174,7 +173,7 @@ public class BILLTest {
     @Test
     public void testGenerateBillNotExistBill() throws Exception {
         billImpl.logIn(TestConstant.GRADUATE_SCHOOL_USER_ID);
-        StudentRecord record = parseStudentRecordFromFile("file/students.txt");
+        StudentRecord record = parseStudentRecordFromFile("students.txt");
         Bill expectedBill = new Bill(record, null, null, null);
         Bill actualBill = billImpl.generateBill(TestConstant.STUDENT_ID);
 

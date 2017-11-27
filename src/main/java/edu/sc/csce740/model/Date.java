@@ -11,7 +11,7 @@ public class Date {
     private int year;
 
     public Date(int month, int day, int year)  {
-        if (month <= 0 || month >= 12 || day <= 0 || day >= 31) {
+        if (month <= 0 || month > 12 || day <= 0 || day > 31 || year < 1000 || year > 9999) {
             throw new InvalidDateException();
         } else {
             this.month = month;
