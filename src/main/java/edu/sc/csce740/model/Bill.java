@@ -67,6 +67,11 @@ public class Bill {
         calculateOtherFee(studentRecord, totalCredit);
     }
 
+    /**
+     *
+     * @param studentRecord
+     * @return
+     */
     private int checkCourse(StudentRecord studentRecord) {
         // Calculate total credits, lab fee and online course fee
         int totalCredit = 0;
@@ -98,6 +103,11 @@ public class Bill {
         return totalCredit;
     }
 
+    /**
+     *
+     * @param studentRecord
+     * @param totalCredit
+     */
     private void calculateTuition(StudentRecord studentRecord, int totalCredit) {
         if (studentRecord.getFreeTuition()) {
             return;
@@ -225,6 +235,11 @@ public class Bill {
         }
     }
 
+    /**
+     *
+     * @param studentRecord
+     * @param totalCredit
+     */
     private void calculateOtherFee(StudentRecord studentRecord, int totalCredit) {
         boolean isFullTime = (totalCredit >= 12);
 
@@ -364,6 +379,12 @@ public class Bill {
 
     }
 
+    /**
+     *
+     * @param startSemester
+     * @param startYear
+     * @return
+     */
     private boolean isFirstSemester(Semester startSemester, int startYear) {
         Calendar now = Calendar.getInstance();
         Semester currentSemester;
@@ -386,6 +407,10 @@ public class Bill {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String toString() {
         String output = "";
         output += "ID: " + this.getStudent().getId() + "\n";

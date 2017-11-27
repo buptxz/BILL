@@ -337,11 +337,14 @@ public class BILL implements BILLIntf {
      * @throws NoLoggedInUserException if the current user id is not in user info set.
      */
     private void validateLoggedInUser() throws NoLoggedInUserException {
-        try {
-            validateUser(currentUser, userInfos.keySet());
-        } catch (InvalidUserException ex) {
+        if (getUser() == null) {
             throw new NoLoggedInUserException();
         }
+//        try {
+//            validateUser(currentUser, userInfos.keySet());
+//        } catch (InvalidUserException ex) {
+//            throw new NoLoggedInUserException();
+//        }
     }
 
     /**
@@ -396,38 +399,38 @@ public class BILL implements BILLIntf {
         }
     }
 
-    /**
-     * Test the BILL back end system
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        String id = "jsmith";
-
-        BILLIntf billTester = new BILL();
-        billTester.logIn(id);
-        billTester.logOut();
-
-        billTester.logIn(id);
-        billTester.applyPayment("mhunt", new BigDecimal(12000), "Make a 1000 payment");
-        System.out.println(billTester.generateBill("mhunt"));
-
-        StudentRecord newRecord = billTester.getRecord("mhunt");
-        newRecord.getStudent().setFirstName("Zheng");
-        newRecord.setResident(true);
-        newRecord.setActiveDuty(true);
-        newRecord.setStudyAboard(StudyAbroad.COHORT);
-
-        billTester.editRecord("mhunt", newRecord, true);
-
-//        billTester.applyPayment("mhunt", new BigDecimal(321.32451), "Make a 1000 payment");
-
-        System.out.println(billTester.generateBill("mhunt"));
-
-        //        billTester.applyPayment(id, new BigDecimal(-1), "Make a 1000 payment");
-        Bill bill = billTester.viewCharges("mhunt", 1, 1, 2017, 12,31,2017);
-        System.out.println(bill);
-        System.out.print("Done");
-
-    }
+//    /**
+//     * Test the BILL back end system
+//     * @param args
+//     * @throws Exception
+//     */
+//    public static void main(String[] args) throws Exception {
+//        String id = "jsmith";
+//
+//        BILLIntf billTester = new BILL();
+//        billTester.logIn(id);
+//        billTester.logOut();
+//
+//        billTester.logIn(id);
+//        billTester.applyPayment("mhunt", new BigDecimal(12000), "Make a 1000 payment");
+//        System.out.println(billTester.generateBill("mhunt"));
+//
+//        StudentRecord newRecord = billTester.getRecord("mhunt");
+//        newRecord.getStudent().setFirstName("Zheng");
+//        newRecord.setResident(true);
+//        newRecord.setActiveDuty(true);
+//        newRecord.setStudyAboard(StudyAbroad.COHORT);
+//
+//        billTester.editRecord("mhunt", newRecord, true);
+//
+////        billTester.applyPayment("mhunt", new BigDecimal(321.32451), "Make a 1000 payment");
+//
+//        System.out.println(billTester.generateBill("mhunt"));
+//
+//        //        billTester.applyPayment(id, new BigDecimal(-1), "Make a 1000 payment");
+//        Bill bill = billTester.viewCharges("mhunt", 1, 1, 2017, 12,31,2017);
+//        System.out.println(bill);
+//        System.out.print("Done");
+//
+//    }
 }
