@@ -56,8 +56,8 @@ public class BILL implements BILLIntf {
         userInfos = new HashMap<String, UserInfo>();
         studentRecords = new HashMap<String, StudentRecord>();
         bills = new HashMap<String, Bill>();
-        loadUsers("file/users.txt");
-        loadRecords("file/students.txt");
+        loadUsers("users.txt");
+        loadRecords("students.txt");
     }
 
     /**
@@ -318,6 +318,10 @@ public class BILL implements BILLIntf {
     private void saveStudentRecords() throws InvalidRecordException, IOException {
         String representation = new GsonBuilder().setPrettyPrinting().create().toJson(studentRecords);
 
+//        PrintWriter fileWriter =
+//                new PrintWriter(new FileOutputStream(new File(classLoader.getResource("students.txt").getFile())));
+//        fileWriter.println(representation);
+//        fileWriter.close();
 //        FileWriter out = new FileWriter(classLoader.getResource("students.txt").getFile());
 //        out.write(representation);
 //        out.close();
