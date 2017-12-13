@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@SuppressWarnings("unused")
 public class Term {
     private Semester semester;
     private int year;

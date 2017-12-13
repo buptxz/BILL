@@ -408,18 +408,4 @@ public class Bill {
 
         return startYear == now.get(Calendar.YEAR) && startSemester == currentSemester;
     }
-
-    /**
-     * Print out the bill
-     * @return The current bill
-     */
-    public String toString() {
-        StringBuilder output = new StringBuilder();
-        output.append("ID: ").append(this.getStudent().getId()).append("\n");
-        output.append("Balance: ").append(this.getBalance()).append("\n\n");
-        for (Transaction transaction : transactions) {
-            output.append(transaction.toString()).append("\n");
-        }
-        return output.toString();
-    }
 }

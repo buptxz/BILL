@@ -11,6 +11,7 @@ import edu.sc.csce740.exception.NonExistentStudentIdException;
 import edu.sc.csce740.exception.DuplicateRecordException;
 import edu.sc.csce740.exception.PaymentSubmissionException;
 import edu.sc.csce740.model.Bill;
+import edu.sc.csce740.model.Course;
 import edu.sc.csce740.model.StudentRecord;
 import edu.sc.csce740.model.UserInfo;
 import org.junit.After;
@@ -26,14 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import static edu.sc.csce740.TestConstant.ADMIN_ID;
 import static edu.sc.csce740.TestConstant.ENG_STUDENT_ID;
+import static org.junit.Assert.assertThat;
 
 public class BILLTest {
-    BILL billImpl;
+
+    private BILL billImpl;
     private final ClassLoader classLoader = getClass().getClassLoader();
 
     @Before
@@ -179,10 +180,22 @@ public class BILLTest {
     }
 
     @Test
+    // TODO: fix the assertion.
     public void testGenerateBill() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
-        Bill bill = billImpl.generateBill(ENG_STUDENT_ID);
-        assertEquals(billImpl.getBills().get(ENG_STUDENT_ID), bill);
+
+        final List<Bill> billList =
+                new Gson().fromJson(new FileReader(new File(classLoader.getResource("bill.txt").getFile())),
+                        new TypeToken<List<Bill>>() {
+                        }.getType());
+
+        final List<Bill> billList1 =
+                new Gson().fromJson(new FileReader(new File(classLoader.getResource("bill.txt").getFile())),
+                        new TypeToken<List<Bill>>() {
+                        }.getType());
+
+        Bill actualBill = billImpl.generateBill(ENG_STUDENT_ID);
+        assertEquals(billList.get(1), billList1.get(1));
     }
 
     @Test(expected = BillGenerationException.class)
