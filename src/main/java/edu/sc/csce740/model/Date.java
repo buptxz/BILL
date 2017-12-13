@@ -72,23 +72,4 @@ public class Date {
             }
         }
     }
-
-    /**
-     * Check the date1 is between the start date and the end date
-     * @param date input date
-     * @param startDate start date
-     * @param endDate end date
-     * @return if the date1 is between the start date and the end date
-     */
-    public static boolean isBeween(Date date, Date startDate, Date endDate) {
-        return isBefore(startDate, endDate) && isBefore(startDate, date) && isBefore(date, endDate);
-    }
-
-    /**
-     * Print out the date
-     * @return the date
-     */
-    public String toString() {
-        return month + "/" + day + "/" + year;
-    }
 }

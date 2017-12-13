@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@SuppressWarnings("unused")
 public class UserInfo {
     private String id;
     private String firstName;

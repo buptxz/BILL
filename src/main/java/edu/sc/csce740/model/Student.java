@@ -1,13 +1,9 @@
 package edu.sc.csce740.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@AllArgsConstructor
+@SuppressWarnings("unused")
 public class Student {
     private String id;
     private String firstName;

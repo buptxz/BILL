@@ -8,8 +8,6 @@ import lombok.ToString;
 import java.util.Calendar;
 
 @Getter
-@AllArgsConstructor
-@ToString
 public class Transaction {
     private Type type;
     private Date transactionDate;
@@ -24,12 +22,4 @@ public class Transaction {
         this.amount = amount;
         this.note = note;
     }
-
-//    @Override
-//    public String toString() {
-//        return "Type: " + type + "\n" +
-//                "Date: " + transactionDate.toString() + "\n" +
-//                "Amount: " + amount + "\n" +
-//                "Note: " + note + "\n";
-//    }
 }

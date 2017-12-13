@@ -14,33 +14,37 @@ import com.google.gson.GsonBuilder;
 import edu.sc.csce740.enums.*;
 import edu.sc.csce740.exception.*;
 import edu.sc.csce740.model.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * An implementation of BILLIntf.
  */
+@Getter
+@Setter
 public class BILL implements BILLIntf {
     /**
      * Currently active user id.
      */
-    String currentUser;
+    private String currentUser;
 
     /**
      * A hash map used to store {@link UserInfo}
      * Key: String of user id
      */
-    Map<String, UserInfo> userInfos;
+    private Map<String, UserInfo> userInfos;
 
     /**
      * A hash map used to store {@link StudentRecord}
      * Key: String of user id
      */
-    Map<String, StudentRecord> studentRecords;
+    private Map<String, StudentRecord> studentRecords;
 
     /**
      *  A hash map used to store {@link Bill}
      *  Key: String of user id
      */
-    Map<String, Bill> bills;
+    private Map<String, Bill> bills;
 
     /**
      * A class loader to read files.
@@ -403,38 +407,5 @@ public class BILL implements BILLIntf {
                 bills.get(userId).getTransactions().add(payment);
             }
         }
-    }
-
-    /**
-     * Test the BILL back end system
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        String id = "jsmith";
-
-        BILLIntf billTester = new BILL();
-        billTester.logIn(id);
-        billTester.logOut();
-
-        billTester.logIn(id);
-//        billTester.applyPayment("mhunt", new BigDecimal(12000), null);
-        System.out.println(billTester.generateBill("mhunt"));
-//        System.out.println(billTester.generateBill("ggay"));
-
-        StudentRecord newRecord = billTester.getRecord("mhunt");
-        newRecord.getStudent().setFirstName("Zheng");
-        newRecord.setResident(true);
-        newRecord.setActiveDuty(true);
-        newRecord.setStudyAboard(StudyAbroad.COHORT);
-        billTester.editRecord("mhunt", newRecord, true);
-
-        System.out.println(billTester.generateBill("mhunt"));
-
-        //        billTester.applyPayment(id, new BigDecimal(-1), "Make a 1000 payment");
-        Bill bill = billTester.viewCharges("mhunt", 1, 1, 2018, 12,31,2018);
-        System.out.println(bill);
-        System.out.print("Done");
-
     }
 }
