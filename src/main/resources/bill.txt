@@ -22,6 +22,26 @@
             "day": 16,
             "year": 2017
           },
+          "amount": 40.00,
+          "note": "LAB FEE - ART HISTORY 725"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 75.00,
+          "note": "LAB FEE - DANCE 577"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
           "amount": 13704.00,
           "note": "GRADUATE - NONRESIDENT - TUITION"
       },
@@ -44,26 +64,6 @@
           },
           "amount": 2547.00,
           "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
-      },
-      {
-          "type": "CHARGE",
-          "transactionDate": {
-            "month": 10,
-            "day": 16,
-            "year": 2017
-          },
-          "amount": 40.00,
-          "note": "LAB FEE - ART HISTORY"
-      },
-      {
-          "type": "CHARGE",
-          "transactionDate": {
-            "month": 10,
-            "day": 16,
-            "year": 2017
-          },
-          "amount": 75.00,
-          "note": "LAB FEE - DANCE"
       }
     ]
   },
@@ -90,8 +90,28 @@
             "day": 16,
             "year": 2017
           },
+          "amount": 148.00,
+          "note": "LAB FEE - CSCE 101"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
           "amount": 8502.00,
-          "note": "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - WOODROW"
+          "note": "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - WOODROW & DEPARTMENTAL"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 80.00,
+          "note": "UNDERGRADUATE - RESIDENT, NONRESIDENT SCHOLARSHIP, ACTIVE DUTY MILITARY - 17 HOURS AND ABOVE"
       },
       {
           "type": "CHARGE",
@@ -122,16 +142,6 @@
           },
           "amount": 918.00,
           "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
-      },
-      {
-          "type": "CHARGE",
-          "transactionDate": {
-            "month": 10,
-            "day": 16,
-            "year": 2017
-          },
-          "amount": 148.00,
-          "note": "LAB FEE - ENGR & COMPUTING (CSCE 101, 102)"
       }
     ]  
   }

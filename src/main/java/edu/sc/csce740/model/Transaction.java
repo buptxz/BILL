@@ -2,12 +2,15 @@ package edu.sc.csce740.model;
 
 import edu.sc.csce740.enums.Type;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Calendar;
 
 @Getter
+@EqualsAndHashCode
+@ToString(exclude="transactionDate")
 public class Transaction {
     private Type type;
     private Date transactionDate;
@@ -22,4 +25,20 @@ public class Transaction {
         this.amount = amount;
         this.note = note;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Transaction otherTransaction = (Transaction) o;
+        return otherTransaction != null && this.type == otherTransaction.getType() &&
+                this.amount == otherTransaction.getAmount() &&
+                ((this.note == null && otherTransaction.getNote() == null) || this.note.equals(otherTransaction.getNote()));
+    }
+
+//    @Override
+//    public String toString() {
+//        return "Type: " + type + "\n" +
+////                "Date: " + transactionDate.toString() + "\n" +
+//                "Amount: " + amount + "\n" +
+//                "Note: " + note + "\n";
+//    }
 }
