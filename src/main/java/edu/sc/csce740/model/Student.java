@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 @EqualsAndHashCode
 @SuppressWarnings("unused")
 public class Student {
@@ -19,8 +18,4 @@ public class Student {
     private String addressCity;
     private String addressState;
     private String addressPostalCode;
-
-//    public boolean equals(Student otherStudent) {
-//        return otherStudent != null && this.id.equals(otherStudent.getId()) && this.firstName
-//    }
 }

@@ -81,7 +81,7 @@
     },
     "college": "ENGINEERING_AND_COMPUTING",
     "classStatus": "FRESHMAN",
-    "balance": 9928.00,
+    "balance": 13391.0,
     "transactions": [
       {
           "type": "CHARGE",
@@ -100,8 +100,8 @@
             "day": 16,
             "year": 2017
           },
-          "amount": 8502.00,
-          "note": "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - WOODROW & DEPARTMENTAL"
+          "amount": 10965.0,
+          "note": "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - SIMS"
       },
       {
           "type": "CHARGE",
@@ -130,6 +130,26 @@
             "day": 16,
             "year": 2017
           },
+          "amount": 750.00,
+          "note": "INTERNATIONAL STUDENT ENROLLMENT FEE - ONE TIME CHARGE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 250.00,
+          "note": "NATIONAL STUDENT EXCHANGE PLACEMENT & ADMINISTRATIVE FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
           "amount": 80.00,
           "note": "MATRICULATION FEE"
       },
@@ -141,6 +161,406 @@
             "year": 2017
           },
           "amount": 918.00,
+          "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
+      }
+    ]  
+  },
+  {
+    "student": {
+      "id": "buptxz",
+      "firstName": "Zheng",
+      "lastName": "Xiong",
+      "phone": "999-999-9999",
+      "emailAddress": "zxiong@mailbox.sc.edu",
+      "addressStreet": "704 Osage Ave",
+      "addressCity": "West Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29169"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "classStatus": "PHD",
+    "balance": 7057.5,
+    "transactions": [
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 14,
+            "year": 2017
+          },
+          "amount": 660.00,
+          "note": "APOGEE FEE - CSCE 750"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 14,
+            "year": 2017
+          },
+          "amount": 3426.0,
+          "note": "GRADUATE - NONRESIDENT - TUITION"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 14,
+            "year": 2017
+          },
+          "amount": 17.0,
+          "note": "TECHNOLOGY FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 14,
+            "year": 2017
+          },
+          "amount": 2547.00,
+          "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 14,
+            "year": 2017
+          },
+          "amount": 178.00,
+          "note": "GRADUATE ASSISTANTS - LESS THAN 12 HOURS - REQUIRED STUDENT HEALTH CENTER FEE - PER SEMESTER"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 14,
+            "year": 2017
+          },
+          "amount": 229.50,
+          "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
+      }
+    ]
+  },
+  {
+    "student": {
+      "id": "jj",
+      "firstName": "James",
+      "lastName": "Jones",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "classStatus": "SENIOR",
+    "balance": 6225.5,
+    "transactions": [
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 148.00,
+          "note": "LAB FEE - CSCE 101"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 1675.5,
+          "note": "ACTIVE DUTY MILITARY UNDERGRADUATE - TUITION"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 17.00,
+          "note": "TECHNOLOGY FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2547.00,
+          "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 119.00,
+          "note": "UNDERGRADUATE STUDENTS - (6 TO 11 HOURS) - REQUIRED STUDENT HEALTH CENTER FEE - PER SEMESTER"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 500.00,
+          "note": "STUDY ABROAD EXCHANGE PROGRAM DEPOSIT - NONREFUNDABLE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 360.00,
+          "note": "MANDATORY STUDY ABROAD INSURANCE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 150.00,
+          "note": "STUDY ABROAD"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 250.00,
+          "note": "NATIONAL STUDENT EXCHANGE PLACEMENT & ADMINISTRATIVE FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 459.00,
+          "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
+      }
+    ]  
+  },
+  {
+    "student": {
+      "id": "lp",
+      "firstName": "Larry",
+      "lastName": "Page",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "classStatus": "JUNIOR",
+    "balance": 5067.0,
+    "transactions": [
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 148.00,
+          "note": "LAB FEE - CSCE 101"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2125.5,
+          "note": "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - ATHLETICS"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 17.00,
+          "note": "TECHNOLOGY FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2547.00,
+          "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 229.50,
+          "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
+      }
+    ]  
+  },
+  {
+    "student": {
+      "id": "jh",
+      "firstName": "James",
+      "lastName": "Harden",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "classStatus": "SOPHOMORE",
+    "balance": 5682.75,
+    "transactions": [
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 148.00,
+          "note": "LAB FEE - CSCE 101"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2741.25,
+          "note": "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - SIMS"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 17.00,
+          "note": "TECHNOLOGY FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2547.00,
+          "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 229.50,
+          "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
+      }
+    ]  
+  },
+  {
+    "student": {
+      "id": "lbj",
+      "firstName": "Lebron",
+      "lastName": "James",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "classStatus": "MASTERS",
+    "balance": 6367.5,
+    "transactions": [
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 148.00,
+          "note": "LAB FEE - CSCE 101"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 3426.0,
+          "note": "GRADUATE - NONRESIDENT - TUITION"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 17.00,
+          "note": "TECHNOLOGY FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2547.00,
+          "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 229.50,
           "note": "ENGINEERING AND COMPUTING PROGRAM FEE - PER SEMESTER"
       }
     ]  

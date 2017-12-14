@@ -1,0 +1,118 @@
+[
+  {
+    "student": {
+      "id": "mhunt",  
+      "firstName": "Michelle",
+      "lastName": "Hunt",
+      "phone": "999-999-9999",
+      "emailAddress": "mhunt@mailbox.sc.edu",
+      "addressStreet": "221B Baker St.",
+      "addressCity": "Pittsburgh",
+      "addressState": "PA",
+      "addressPostalCode": "26505"
+    },
+    "college": "ARTS_AND_SCIENCES",
+    "classStatus": "PHD",
+    "balance": 16566.00,
+    "transactions": [
+      {
+          "type": "PAYMENT",
+          "transactionDate": {
+            "month": 9,
+            "day": 10,
+            "year": 2016
+          },
+          "amount": 2000.00
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 12,
+            "day": 15,
+            "year": 2016
+          },
+          "amount": 2000.00,
+          "note": "Final total Fall 2016"
+      },
+      {
+          "type": "PAYMENT",
+          "transactionDate": {
+            "month": 1,
+            "day": 10,
+            "year": 2017
+          },
+          "amount": 100.00,
+          "note": "Return for fee miscalculation"
+      },
+      {
+          "type": "PAYMENT",
+          "transactionDate": {
+            "month": 1,
+            "day": 15,
+            "year": 2017
+          },
+          "amount": 1900.00
+       },
+       { 
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 5,
+            "day": 15,
+            "year": 2017
+          },
+          "amount": 2000.00,
+          "note": "Final total Spring 2016"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 40.00,
+          "note": "LAB FEE - ART HISTORY 725"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 75.00,
+          "note": "LAB FEE - DANCE 577"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 13704.00,
+          "note": "GRADUATE - NONRESIDENT - TUITION"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 200.00,
+          "note": "TECHNOLOGY FEE"
+      },
+      {
+          "type": "CHARGE",
+          "transactionDate": {
+            "month": 10,
+            "day": 16,
+            "year": 2017
+          },
+          "amount": 2547.00,
+          "note": "HEALTH INSURANCE - (STUDENTS WITHOUT COVERAGE) - CONTRACT W/THIRD PARTY"
+      }
+    ]
+  }
+]

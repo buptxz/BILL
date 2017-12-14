@@ -23,7 +23,7 @@ public class StudentRecord {
     private Boolean veteran;
     private Boolean freeTuition;
     private Scholarship scholarship;
-    private StudyAbroad studyAboard;
+    private StudyAbroad studyAbroad;
     private Boolean nationalStudentExchange;
     private Boolean outsideInsurance;
     private List<Course> courses;

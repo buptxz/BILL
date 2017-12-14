@@ -13,7 +13,7 @@
     },
     "college": "ARTS_AND_SCIENCES",
     "termBegan": {
-      "semester": "FALL",
+      "semester": "SPRING",
       "year": 2016
     },
     "classStatus": "PHD",
@@ -118,15 +118,15 @@
     },
     "classStatus": "FRESHMAN",
     "gradAssistant": false,
-    "international": false,
+    "international": true,
     "internationalStatus": "NONE",
     "resident": false,
     "activeDuty": false,
     "veteran": false,
     "freeTuition": false,
-    "scholarship": "WOODROW",
+    "scholarship": "SIMS",
     "studyAbroad": "NONE",
-    "nationalStudentExchange": false,
+    "nationalStudentExchange": true,
     "outsideInsurance": true,
     "courses": [
         {
@@ -157,6 +157,202 @@
             "name": "Why Did I Take This? A Course on Regret",
             "id": "PSYCHOLOGY 190",
             "numCredits": 3
+        }
+    ]
+  },
+  {
+    "student": {
+      "id": "buptxz",
+      "firstName": "Zheng",
+      "lastName": "Xiong",
+      "phone": "999-999-9999",
+      "emailAddress": "zxiong@mailbox.sc.edu",
+      "addressStreet": "704 Osage Ave",
+      "addressCity": "West Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29169"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "termBegan": {
+      "semester": "Fall",
+      "year": 2014
+    },
+    "classStatus": "PHD",
+    "gradAssistant": true,
+    "international": false,
+    "internationalStatus": "NONE",
+    "resident": false,
+    "activeDuty": false,
+    "veteran": false,
+    "freeTuition": false,
+    "scholarship": "NONE",
+    "studyAbroad": "NONE",
+    "nationalStudentExchange": false,
+    "outsideInsurance": false,
+    "courses": [
+        {
+            "name": "Algorithms",
+            "id": "CSCE 750",
+            "numCredits": 3,
+            "online": true
+        }
+    ]
+  },
+  {
+    "student": {
+      "id": "jj",
+      "firstName": "James",
+      "lastName": "Jones",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "termBegan": {
+      "semester": "SUMMER",
+      "year": 2014
+    },
+    "classStatus": "SENIOR",
+    "gradAssistant": false,
+    "international": true,
+    "internationalStatus": "NONE",
+    "resident": true,
+    "activeDuty": true,
+    "veteran": true,
+    "freeTuition": false,
+    "scholarship": "ATHLETIC",
+    "studyAbroad": "REGULAR",
+    "nationalStudentExchange": true,
+    "outsideInsurance": false,
+    "courses": [
+        {
+            "name": "Intro to Computer Science",
+            "id": "CSCE 101",
+            "numCredits": 3,
+            "online": false
+        },
+        {
+            "name": "Underwater Basket Weaving",
+            "id": "STUFF 150",
+            "numCredits": 3,
+            "online": false
+        }
+    ]
+  },
+  {
+    "student": {
+      "id": "lp",
+      "firstName": "Larry",
+      "lastName": "Page",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "termBegan": {
+      "semester": "SUMMER",
+      "year": 2016
+    },
+    "classStatus": "JUNIOR",
+    "gradAssistant": false,
+    "international": false,
+    "internationalStatus": "NONE",
+    "resident": false,
+    "activeDuty": false,
+    "veteran": false,
+    "freeTuition": false,
+    "scholarship": "ATHLETIC",
+    "studyAbroad": "NONE",
+    "nationalStudentExchange": false,
+    "outsideInsurance": false,
+    "courses": [
+        {
+            "name": "Intro to Computer Science",
+            "id": "CSCE 101",
+            "numCredits": 3,
+            "online": false
+        }
+    ]
+  },
+  {
+    "student": {
+      "id": "jh",
+      "firstName": "James",
+      "lastName": "Harden",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "termBegan": {
+      "semester": "SUMMER",
+      "year": 2015
+    },
+    "classStatus": "SOPHOMORE",
+    "gradAssistant": false,
+    "international": false,
+    "internationalStatus": "NONE",
+    "resident": false,
+    "activeDuty": false,
+    "veteran": false,
+    "freeTuition": false,
+    "scholarship": "SIMS",
+    "studyAbroad": "NONE",
+    "nationalStudentExchange": false,
+    "outsideInsurance": false,
+    "courses": [
+        {
+            "name": "Intro to Computer Science",
+            "id": "CSCE 101",
+            "numCredits": 3,
+            "online": false
+        }
+    ]
+  },
+  {
+    "student": {
+      "id": "lbj",
+      "firstName": "Lebron",
+      "lastName": "James",
+      "phone": "999-999-9999",
+      "emailAddress": "ggay@mailbox.sc.edu",
+      "addressStreet": "1600 Pennsylvania Ave",
+      "addressCity": "Columbia",
+      "addressState": "SC",
+      "addressPostalCode": "29205"
+    },
+    "college": "ENGINEERING_AND_COMPUTING",
+    "termBegan": {
+      "semester": "FALL",
+      "year": 2016
+    },
+    "classStatus": "MASTERS",
+    "gradAssistant": false,
+    "international": false,
+    "internationalStatus": "NONE",
+    "resident": false,
+    "activeDuty": false,
+    "veteran": false,
+    "freeTuition": false,
+    "scholarship": "NONE",
+    "studyAbroad": "NONE",
+    "nationalStudentExchange": false,
+    "outsideInsurance": false,
+    "courses": [
+        {
+            "name": "Intro to Computer Science",
+            "id": "CSCE 101",
+            "numCredits": 3,
+            "online": false
         }
     ]
   }

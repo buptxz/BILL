@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.util.Calendar;
 
 @Getter
-@EqualsAndHashCode
 @ToString(exclude="transactionDate")
 public class Transaction {
     private Type type;
@@ -33,12 +32,4 @@ public class Transaction {
                 this.amount == otherTransaction.getAmount() &&
                 ((this.note == null && otherTransaction.getNote() == null) || this.note.equals(otherTransaction.getNote()));
     }
-
-//    @Override
-//    public String toString() {
-//        return "Type: " + type + "\n" +
-////                "Date: " + transactionDate.toString() + "\n" +
-//                "Amount: " + amount + "\n" +
-//                "Note: " + note + "\n";
-//    }
 }

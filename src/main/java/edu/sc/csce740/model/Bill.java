@@ -17,7 +17,6 @@ import java.util.Calendar;
  */
 @Getter
 @Setter
-@ToString
 public class Bill {
     private Student student;
     private College college;
@@ -191,7 +190,7 @@ public class Bill {
                                     "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - ATHLETICS");
                         } else if (studentRecord.getScholarship() == Scholarship.SIMS) {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_SIMS_TUITION_FULL_TIME,
-                                    "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP -SIMS");
+                                    "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - SIMS");
                         } else {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_TUITION_FULL_TIME,
                                     "UNDERGRADUATE - NONRESIDENT - TUITION");
@@ -237,7 +236,7 @@ public class Bill {
                                     "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - ATHLETICS");
                         } else if (studentRecord.getScholarship() == Scholarship.SIMS) {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_SCHOLARSHIP_SIMS_TUITION_PART_TIME * totalCredit,
-                                    "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP -SIMS");
+                                    "UNDERGRADUATE - NONRESIDENT - SCHOLARSHIP - SIMS");
                         } else {
                             addCharge(FeeConstant.UNDERGRADUATE_NONRESIDENT_TUITION_PART_TIME * totalCredit,
                                     "UNDERGRADUATE - NONRESIDENT - TUITION");
@@ -321,15 +320,15 @@ public class Bill {
         }
 
         // Study abroad
-        if (studentRecord.getStudyAboard() == StudyAbroad.REGULAR ||
-                studentRecord.getStudyAboard() == StudyAbroad.COHORT) {
+        if (studentRecord.getStudyAbroad() == StudyAbroad.REGULAR ||
+                studentRecord.getStudyAbroad() == StudyAbroad.COHORT) {
             addCharge(FeeConstant.STUDY_ABROAD_EXCHANGE_PROGRAM_DEPOSIT_NONREFUNDABLE,
                     "STUDY ABROAD EXCHANGE PROGRAM DEPOSIT - NONREFUNDABLE");
             addCharge(FeeConstant.MANDATORY_STUDY_ABROAD_INSURANCE,
                     "MANDATORY STUDY ABROAD INSURANCE");
-            if (studentRecord.getStudyAboard() == StudyAbroad.REGULAR) {
+            if (studentRecord.getStudyAbroad() == StudyAbroad.REGULAR) {
                 addCharge(FeeConstant.STUDY_ABROAD, "STUDY ABROAD");
-            } else if (studentRecord.getStudyAboard() == StudyAbroad.COHORT) {
+            } else if (studentRecord.getStudyAbroad() == StudyAbroad.COHORT) {
                 addCharge(FeeConstant.COHORT_STUDY_ABROAD, "COHORT STUDY ABROAD");
             }
         }

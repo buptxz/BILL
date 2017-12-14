@@ -33,5 +33,47 @@
         "lastName": "Smith",
         "role": "ADMIN",
         "college": "ARTS_AND_SCIENCES"
+    },
+    {
+        "id": "buptxz",
+        "firstName": "Zheng",
+        "lastName": "Xiong",
+        "role": "STUDENT",
+        "college": "ENGINEERING_AND_COMPUTING"
+    },
+    {
+        "id": "jj",
+        "firstName": "James",
+        "lastName": "Jones",
+        "role": "STUDENT",
+        "college": "ENGINEERING_AND_COMPUTING"
+    },
+    {
+        "id": "lp",
+        "firstName": "Larry",
+        "lastName": "Page",
+        "role": "STUDENT",
+        "college": "ENGINEERING_AND_COMPUTING"
+    },
+    {
+        "id": "jh",
+        "firstName": "James",
+        "lastName": "Harden",
+        "role": "STUDENT",
+        "college": "ENGINEERING_AND_COMPUTING"
+    },
+    {
+        "id": "lbj",
+        "firstName": "Lebron",
+        "lastName": "James",
+        "role": "STUDENT",
+        "college": "ENGINEERING_AND_COMPUTING"
+    },
+    {
+        "id": "test5",
+        "firstName": "Jeremy",
+        "lastName": "Lin",
+        "role": "STUDENT",
+        "college": "ENGINEERING_AND_COMPUTING"
     }
 ]

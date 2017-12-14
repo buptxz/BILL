@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
-@EqualsAndHashCode
 public class Date {
     private int month;
     private int day;
@@ -73,13 +72,5 @@ public class Date {
                 return startDate.getDay() <= endDate.getDay();
             }
         }
-    }
-
-    /**
-     * Print out the date
-     * @return the date
-     */
-    public String toString() {
-        return month + "/" + day + "/" + year;
     }
 }

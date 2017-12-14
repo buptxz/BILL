@@ -25,6 +25,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertEquals;
 
@@ -78,6 +80,7 @@ public class BILLTest {
     @Test
     public void testLogIn() throws Exception {
         billImpl.logIn(ADMIN_ID);
+        assertEquals(ADMIN_ID, billImpl.getUser());
     }
 
     @Test(expected = InvalidUserException.class)
@@ -89,6 +92,7 @@ public class BILLTest {
     public void testLogOut() throws Exception {
         billImpl.logIn(ADMIN_ID);
         billImpl.logOut();
+        assertEquals(null, billImpl.getUser());
     }
 
     @Test(expected = NoLoggedInUserException.class)
@@ -107,18 +111,28 @@ public class BILLTest {
     public void testGetStudentIDs() throws Exception {
         billImpl.logIn(ADMIN_ID);
         List<String> studentIDList = billImpl.getStudentIDs();
-        List<String> expectedStudentIDList = new ArrayList<String>();
-        expectedStudentIDList.add("ggay");
-        assertEquals(expectedStudentIDList, studentIDList);
+        Set studentIDSet = new HashSet(studentIDList);
+        Set<String> expectedStudentIDSet = new HashSet<String>();
+        expectedStudentIDSet.add("ggay");
+        expectedStudentIDSet.add("buptxz");
+        expectedStudentIDSet.add("jj");
+        expectedStudentIDSet.add("lp");
+        expectedStudentIDSet.add("jh");
+        expectedStudentIDSet.add("lbj");
+//        expectedStudentIDSet.add("test5");
+        assertEquals(expectedStudentIDSet, studentIDSet);
     }
 
     @Test
     public void testGetStudentIDsGraduateSchool() throws Exception {
         billImpl.logIn(TestConstant.GRADUATE_SCHOOL_USER_ID);
         List<String> studentIDList = billImpl.getStudentIDs();
-        List<String> expectedStudentIDList = new ArrayList<String>();
-        expectedStudentIDList.add("mhunt");
-        assertEquals(expectedStudentIDList, studentIDList);
+        Set studentIDSet = new HashSet(studentIDList);
+        Set<String> expectedStudentIDSet = new HashSet<String>();
+        expectedStudentIDSet.add("mhunt");
+        expectedStudentIDSet.add("buptxz");
+        expectedStudentIDSet.add("lbj");
+        assertEquals(expectedStudentIDSet, studentIDSet);
     }
 
     @Test(expected = NonExistentStudentIdException.class)
@@ -185,17 +199,39 @@ public class BILLTest {
     }
 
     @Test
-    // TODO: fix the assertion.
-    public void testGenerateBill() throws Exception {
-        billImpl.logIn("mhunt");
+    public void testGenerateBillGraduate() throws Exception {
+        billImpl.logIn("mmatthews");
 
         final List<Bill> billList =
                 new Gson().fromJson(new FileReader(new File(classLoader.getResource("bill.txt").getFile())),
                         new TypeToken<List<Bill>>() {
                         }.getType());
 
-        Bill actualBill = billImpl.generateBill("mhunt");
-        assertEquals(billList.get(0), actualBill);
+        Bill actualBill1 = billImpl.generateBill("mhunt");
+        Bill actualBill2 = billImpl.generateBill("buptxz");
+        assertEquals(billList.get(0), actualBill1);
+        assertEquals(billList.get(2), actualBill2);
+    }
+
+    @Test
+    public void testGenerateBillEngineering() throws Exception {
+        billImpl.logIn("rbob");
+
+        final List<Bill> billList =
+                new Gson().fromJson(new FileReader(new File(classLoader.getResource("bill.txt").getFile())),
+                        new TypeToken<List<Bill>>() {
+                        }.getType());
+
+        Bill actualBill1 = billImpl.generateBill("jj");
+        Bill actualBill2 = billImpl.generateBill("lp");
+        Bill actualBill3 = billImpl.generateBill("jh");
+        Bill actualBill4 = billImpl.generateBill("lbj");
+        Bill actualBill5 = billImpl.generateBill("ggay");
+        assertEquals(billList.get(3), actualBill1);
+        assertEquals(billList.get(4), actualBill2);
+        assertEquals(billList.get(5), actualBill3);
+        assertEquals(billList.get(6), actualBill4);
+        assertEquals(billList.get(1), actualBill5);
     }
 
     @Test(expected = BillGenerationException.class)
@@ -217,15 +253,14 @@ public class BILLTest {
         Bill actualBill = billImpl.viewCharges("mhunt", 1,1,1990,
                 12,31,2017);
         final List<Bill> billList =
-                new Gson().fromJson(new FileReader(new File(classLoader.getResource("bill1.txt").getFile())),
+                new Gson().fromJson(new FileReader(new File(classLoader.getResource("charge.txt").getFile())),
                         new TypeToken<List<Bill>>() {
                         }.getType());
         assertEquals(billList.get(0), actualBill);
-//        assertTrue(billList.get(0).equals(actualBill));
     }
 
     @Test
-    public void testApplyPament() throws Exception {
+    public void testApplyPayment() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
         double expectedBill = billImpl.generateBill(ENG_STUDENT_ID).getBalance();
         billImpl.applyPayment(ENG_STUDENT_ID, new BigDecimal(100), "Test payment.");
@@ -234,9 +269,15 @@ public class BILLTest {
     }
 
     @Test(expected = PaymentSubmissionException.class)
-    public void testApplyPaymentWithException() throws Exception {
+    public void testApplyPaymentWithOverflow() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
-        billImpl.applyPayment(ENG_STUDENT_ID, new BigDecimal(10000), "Test payment.");
+        billImpl.applyPayment(ENG_STUDENT_ID, new BigDecimal(100000), "Test payment.");
+    }
+
+    @Test(expected = PaymentSubmissionException.class)
+    public void testApplyPaymentWithInvalidNumber() throws Exception {
+        billImpl.logIn(ENG_STUDENT_ID);
+        billImpl.applyPayment(ENG_STUDENT_ID, new BigDecimal(-100), "Test payment.");
     }
 
     @Test(expected = BillGenerationException.class)
