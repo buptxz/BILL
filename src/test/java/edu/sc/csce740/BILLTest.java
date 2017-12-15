@@ -32,19 +32,24 @@ import static org.junit.Assert.assertEquals;
 
 import static edu.sc.csce740.TestConstant.ADMIN_ID;
 import static edu.sc.csce740.TestConstant.ENG_STUDENT_ID;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class BILLTest {
 
     private BILL billImpl;
     private final ClassLoader classLoader = getClass().getClassLoader();
 
+    /**
+     * Initialization
+     * @throws FileNotFoundException
+     */
     @Before
     public void setup() throws FileNotFoundException {
         billImpl = new BILL();
     }
 
+    /**
+     * Tear down
+     */
     @After
     public void cleanup() {
         billImpl.setCurrentUser(null);
@@ -54,7 +59,7 @@ public class BILLTest {
     }
 
     /**
-     *
+     * Test load users
      * @throws Exception
      */
     @Test(expected = DuplicateRecordException.class)
@@ -62,32 +67,56 @@ public class BILLTest {
         billImpl.loadUsers(TestConstant.USER_FILE);
     }
 
+    /**
+     * Test load users exception
+     * @throws Exception
+     */
     @Test(expected = FileNotFoundException.class)
     public void testLoadUsersWithException() throws Exception {
         billImpl.loadUsers(TestConstant.INVALID_FILE_NAME);
     }
 
+    /**
+     * Test load records
+     * @throws Exception
+     */
     @Test(expected = DuplicateRecordException.class)
     public void testLoadRecords() throws Exception {
         billImpl.loadRecords(TestConstant.RECORD_FILE);
     }
 
+    /**
+     * Test load records exception
+     * @throws Exception
+     */
     @Test(expected = FileNotFoundException.class)
     public void testLoadRecordsWithException() throws Exception {
         billImpl.loadRecords(TestConstant.INVALID_FILE_NAME);
     }
 
+    /**
+     * Test login
+     * @throws Exception
+     */
     @Test
     public void testLogIn() throws Exception {
         billImpl.logIn(ADMIN_ID);
         assertEquals(ADMIN_ID, billImpl.getUser());
     }
 
+    /**
+     * Test invalid login
+     * @throws Exception
+     */
     @Test(expected = InvalidUserException.class)
     public void testLogInWithException() throws Exception {
         billImpl.logIn(TestConstant.INVALID_USER_ID);
     }
 
+    /**
+     * Test logout
+     * @throws Exception
+     */
     @Test
     public void testLogOut() throws Exception {
         billImpl.logIn(ADMIN_ID);
@@ -95,11 +124,19 @@ public class BILLTest {
         assertEquals(null, billImpl.getUser());
     }
 
+    /**
+     * Test invalid logout
+     * @throws Exception
+     */
     @Test(expected = NoLoggedInUserException.class)
     public void testLogOutWithException() throws Exception {
         billImpl.logOut();
     }
 
+    /**
+     * Test get users
+     * @throws Exception
+     */
     @Test
     public void testGetUser() throws Exception {
         billImpl.logIn(ADMIN_ID);
@@ -107,6 +144,10 @@ public class BILLTest {
         assertEquals(ADMIN_ID, userId);
     }
 
+    /**
+     * Test get student id
+     * @throws Exception
+     */
     @Test
     public void testGetStudentIDs() throws Exception {
         billImpl.logIn(ADMIN_ID);
@@ -119,10 +160,13 @@ public class BILLTest {
         expectedStudentIDSet.add("lp");
         expectedStudentIDSet.add("jh");
         expectedStudentIDSet.add("lbj");
-//        expectedStudentIDSet.add("test5");
         assertEquals(expectedStudentIDSet, studentIDSet);
     }
 
+    /**
+     * Test get studetn id, admin is from graduate school
+     * @throws Exception
+     */
     @Test
     public void testGetStudentIDsGraduateSchool() throws Exception {
         billImpl.logIn(TestConstant.GRADUATE_SCHOOL_USER_ID);
@@ -135,12 +179,20 @@ public class BILLTest {
         assertEquals(expectedStudentIDSet, studentIDSet);
     }
 
+    /**
+     * Test get student id request from a student
+     * @throws Exception
+     */
     @Test(expected = NonExistentStudentIdException.class)
     public void testGetStudentIDsWithException() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
         billImpl.getStudentIDs();
     }
 
+    /**
+     * Test get record
+     * @throws Exception
+     */
     @Test
     public void testGetRecord() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
@@ -148,12 +200,20 @@ public class BILLTest {
         assertEquals(billImpl.getStudentRecords().get(TestConstant.STUDENT_ID), studentRecord);
     }
 
+    /**
+     * Test get invalid get record
+     * @throws Exception
+     */
     @Test(expected = NonExistentRecordException.class)
     public void testGetRecordWithException() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
         StudentRecord studentRecord = billImpl.getRecord(TestConstant.INVALID_USER_ID);
     }
 
+    /**
+     * Test edit record by student
+     * @throws Exception
+     */
     @Test
     public void testEditRecordByStudent() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
@@ -167,6 +227,10 @@ public class BILLTest {
         assertEquals(studentRecordsList.get(0).getStudent(), billImpl.getStudentRecords().get(ENG_STUDENT_ID).getStudent());
     }
 
+    /**
+     * Test edit record by admin
+     * @throws Exception
+     */
     @Test
     public void testEditRecordByAdmin() throws Exception {
         billImpl.logIn(ADMIN_ID);
@@ -180,24 +244,40 @@ public class BILLTest {
         assertEquals(studentRecordsList.get(0), billImpl.getStudentRecords().get(ENG_STUDENT_ID));
     }
 
+    /**
+     * Test illegal edit record
+     * @throws Exception
+     */
     @Test(expected = IllegalRecordEditException.class)
     public void testEditRecordEmptyRecord() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
         billImpl.editRecord(TestConstant.STUDENT_ID, null, true);
     }
 
+    /**
+     * Test illegal edit record
+     * @throws Exception
+     */
     @Test(expected = IllegalRecordEditException.class)
     public void testEditRecordByStudentWithException() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
         billImpl.editRecord(ADMIN_ID, null, true);
     }
 
+    /**
+     * Test illegal edit record
+     * @throws Exception
+     */
     @Test(expected = IllegalRecordEditException.class)
     public void testEditRecordByAdminWithException() throws Exception {
         billImpl.logIn(ADMIN_ID);
         billImpl.editRecord(TestConstant.STUDENT_ID, null, true);
     }
 
+    /**
+     * Test generate bill
+     * @throws Exception
+     */
     @Test
     public void testGenerateBillGraduate() throws Exception {
         billImpl.logIn("mmatthews");
@@ -213,6 +293,10 @@ public class BILLTest {
         assertEquals(billList.get(2), actualBill2);
     }
 
+    /**
+     * Test generate bill
+     * @throws Exception
+     */
     @Test
     public void testGenerateBillEngineering() throws Exception {
         billImpl.logIn("rbob");
@@ -234,12 +318,20 @@ public class BILLTest {
         assertEquals(billList.get(1), actualBill5);
     }
 
+    /**
+     * Test generate bill exception
+     * @throws Exception
+     */
     @Test(expected = BillGenerationException.class)
     public void testGenerateBillWithException() throws Exception {
         billImpl.logIn(ADMIN_ID);
         billImpl.generateBill(TestConstant.STUDENT_ID);
     }
 
+    /**
+     * Test view charge with invalid date input
+     * @throws Exception
+     */
     @Test(expected = BillGenerationException.class)
     public void testViewChargesStartDateLaterThanEndDate() throws Exception {
         billImpl.logIn(TestConstant.STUDENT_ID);
@@ -247,6 +339,20 @@ public class BILLTest {
                 1, 1, 2017);
     }
 
+    /**
+     * Test view charge with invalid date
+     * @throws Exception
+     */
+    @Test(expected = BillGenerationException.class)
+    public void testInvalidDateExceptionViewCharges() throws Exception {
+        billImpl.logIn(ENG_STUDENT_ID);
+        billImpl.viewCharges(ENG_STUDENT_ID, 13, 0, 0, 13, 0, 0);
+    }
+
+    /**
+     * Test view charge
+     * @throws Exception
+     */
     @Test
     public void testViewCharge() throws Exception {
         billImpl.logIn("mhunt");
@@ -259,6 +365,10 @@ public class BILLTest {
         assertEquals(billList.get(0), actualBill);
     }
 
+    /**
+     * Test apply payment
+     * @throws Exception
+     */
     @Test
     public void testApplyPayment() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
@@ -268,22 +378,23 @@ public class BILLTest {
                 , billImpl.getBills().get(ENG_STUDENT_ID).getBalance(), 0.001);
     }
 
+    /**
+     * Test apply payment with invalid input amount
+     * @throws Exception
+     */
     @Test(expected = PaymentSubmissionException.class)
     public void testApplyPaymentWithOverflow() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
         billImpl.applyPayment(ENG_STUDENT_ID, new BigDecimal(100000), "Test payment.");
     }
 
+    /**
+     * Test apply payment with invalid payment amount
+     * @throws Exception
+     */
     @Test(expected = PaymentSubmissionException.class)
     public void testApplyPaymentWithInvalidNumber() throws Exception {
         billImpl.logIn(ENG_STUDENT_ID);
         billImpl.applyPayment(ENG_STUDENT_ID, new BigDecimal(-100), "Test payment.");
     }
-
-    @Test(expected = BillGenerationException.class)
-    public void testInvalidDateExceptionViewCharges() throws Exception {
-        billImpl.logIn(ENG_STUDENT_ID);
-        billImpl.viewCharges(ENG_STUDENT_ID, 13, 0, 0, 13, 0, 0);
-    }
-
 }
